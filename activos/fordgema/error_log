@@ -1,0 +1,45 @@
+[06-Aug-2025 15:11:03 UTC] PHP Warning:  require(../../vendor/autoload.php): failed to open stream: No such file or directory in /home/d5kor6umkb37/public_html/ebookford.com/basesite/lib/functions.php on line 2
+[06-Aug-2025 15:11:03 UTC] PHP Fatal error:  require(): Failed opening required '../../vendor/autoload.php' (include_path='.:/opt/alt/php74/usr/share/pear') in /home/d5kor6umkb37/public_html/ebookford.com/basesite/lib/functions.php on line 2
+[06-Aug-2025 15:11:13 UTC] PHP Warning:  require(../../vendor/autoload.php): failed to open stream: No such file or directory in /home/d5kor6umkb37/public_html/ebookford.com/basesite/lib/functions.php on line 2
+[06-Aug-2025 15:11:13 UTC] PHP Fatal error:  require(): Failed opening required '../../vendor/autoload.php' (include_path='.:/opt/alt/php74/usr/share/pear') in /home/d5kor6umkb37/public_html/ebookford.com/basesite/lib/functions.php on line 2
+[09-Sep-2025 20:40:16 UTC] PHP Warning:  file_get_contents(./json/ford.json): failed to open stream: No such file or directory in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/lib/functions.php on line 7
+[09-Sep-2025 20:40:25 UTC] PHP Notice:  Undefined property: stdClass::$site_url in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/index.php on line 33
+[09-Sep-2025 20:40:25 UTC] PHP Notice:  Undefined property: stdClass::$site_url in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/index.php on line 34
+[09-Sep-2025 20:40:25 UTC] PHP Notice:  Undefined property: stdClass::$promos in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/lib/functions.php on line 106
+[09-Sep-2025 20:40:25 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/index.php on line 151
+[09-Sep-2025 20:42:15 UTC] PHP Notice:  Undefined property: stdClass::$site_url in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/index.php on line 33
+[09-Sep-2025 20:42:15 UTC] PHP Notice:  Undefined property: stdClass::$site_url in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/index.php on line 34
+[09-Sep-2025 20:42:15 UTC] PHP Notice:  Undefined property: stdClass::$promos in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/lib/functions.php on line 106
+[09-Sep-2025 20:42:15 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/index.php on line 151
+[10-Sep-2025 17:06:12 UTC] PHP Notice:  Undefined property: stdClass::$site_url in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/index.php on line 33
+[10-Sep-2025 17:06:12 UTC] PHP Notice:  Undefined property: stdClass::$site_url in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/index.php on line 34
+[10-Sep-2025 17:06:12 UTC] PHP Notice:  Undefined property: stdClass::$promos in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/lib/functions.php on line 106
+[10-Sep-2025 17:06:12 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/index.php on line 151
+[10-Sep-2025 20:18:18 UTC] PHP Notice:  Undefined property: stdClass::$site_url in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/index.php on line 33
+[10-Sep-2025 20:18:18 UTC] PHP Notice:  Undefined property: stdClass::$site_url in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/index.php on line 34
+[10-Sep-2025 20:18:18 UTC] PHP Notice:  Undefined property: stdClass::$promos in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/lib/functions.php on line 106
+[10-Sep-2025 20:18:18 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/index.php on line 151
+[11-Sep-2025 06:57:34 UTC] PHP Notice:  Undefined property: stdClass::$site_url in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/index.php on line 33
+[11-Sep-2025 06:57:34 UTC] PHP Notice:  Undefined property: stdClass::$site_url in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/index.php on line 34
+[11-Sep-2025 06:57:34 UTC] PHP Notice:  Undefined property: stdClass::$promos in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/lib/functions.php on line 106
+[11-Sep-2025 06:57:34 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/index.php on line 151
+[11-Sep-2025 06:57:56 UTC] PHP Notice:  Undefined property: stdClass::$site_url in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/index.php on line 33
+[11-Sep-2025 06:57:56 UTC] PHP Notice:  Undefined property: stdClass::$site_url in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/index.php on line 34
+[11-Sep-2025 06:57:56 UTC] PHP Notice:  Undefined property: stdClass::$promos in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/lib/functions.php on line 106
+[11-Sep-2025 06:57:56 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/index.php on line 151
+[11-Sep-2025 14:41:39 UTC] PHP Notice:  Undefined property: stdClass::$site_url in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/index.php on line 33
+[11-Sep-2025 14:41:39 UTC] PHP Notice:  Undefined property: stdClass::$site_url in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/index.php on line 34
+[11-Sep-2025 14:41:39 UTC] PHP Notice:  Undefined property: stdClass::$promos in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/lib/functions.php on line 106
+[11-Sep-2025 14:41:39 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/index.php on line 151
+[11-Sep-2025 15:46:52 UTC] PHP Notice:  Undefined property: stdClass::$site_url in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/index.php on line 33
+[11-Sep-2025 15:46:52 UTC] PHP Notice:  Undefined property: stdClass::$site_url in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/index.php on line 34
+[11-Sep-2025 15:46:52 UTC] PHP Notice:  Undefined property: stdClass::$promos in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/lib/functions.php on line 106
+[11-Sep-2025 15:46:52 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/index.php on line 151
+[11-Sep-2025 15:46:53 UTC] PHP Notice:  Undefined property: stdClass::$site_url in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/index.php on line 33
+[11-Sep-2025 15:46:53 UTC] PHP Notice:  Undefined property: stdClass::$site_url in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/index.php on line 34
+[11-Sep-2025 15:46:53 UTC] PHP Notice:  Undefined property: stdClass::$promos in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/lib/functions.php on line 106
+[11-Sep-2025 15:46:53 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/index.php on line 151
+[12-Sep-2025 11:12:42 UTC] PHP Notice:  Undefined property: stdClass::$site_url in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/index.php on line 33
+[12-Sep-2025 11:12:42 UTC] PHP Notice:  Undefined property: stdClass::$site_url in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/index.php on line 34
+[12-Sep-2025 11:12:42 UTC] PHP Notice:  Undefined property: stdClass::$promos in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/lib/functions.php on line 106
+[12-Sep-2025 11:12:42 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/d5kor6umkb37/public_html/ebookford.com/activos/fordgema/index.php on line 151

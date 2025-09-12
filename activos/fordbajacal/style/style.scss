@@ -1,0 +1,726 @@
+$main-blue: #00244b;
+$blue: #2e99d1;
+$black: #202020;
+$white: #ffffff;
+
+// Mixins
+// Background Cover Mixin
+@mixin background-cover {
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  border-radius: $radius;
+}
+
+@mixin boxshadow {
+  -webkit-box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.25);
+}
+
+@mixin animacion {
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  -o-transition: all 0.5s;
+  -ms-transition: all 0.5s;
+  transition: all 0.5s;
+}
+
+@mixin animacion2 {
+  -webkit-transition: all 1s;
+  -moz-transition: all 1s;
+  -o-transition: all 1s;
+  -ms-transition: all 1s;
+  transition: all 1s;
+}
+
+@mixin animacion3 {
+  -webkit-transition: all 0.2s;
+  -moz-transition: all 0.2s;
+  -o-transition: all 0.2s;
+  -ms-transition: all 0.2s;
+  transition: all 0.2s;
+}
+
+@mixin bkcover {
+  background-position: center;
+  background-repeat: no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+@mixin bkcontainer {
+  background-position: center;
+  background-repeat: no-repeat;
+  -webkit-background-size: contain;
+  -moz-background-size: contain;
+  -o-background-size: contain;
+  background-size: contain;
+}
+
+body{
+  padding-top: 78px;
+}
+.sticky-top {
+  top: 12%;
+}
+.bg-light{
+  background-color: #ffffff !important;
+}
+.name-distribuitor{
+  position: relative;
+  display: block;
+  margin-left: 10px;
+  color: $main-blue;
+}
+
+section{
+  padding: 90px 0;
+}
+
+.scroll-up{
+  display: inline-block;
+  background-color: #ffffff;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  text-align: center;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  transition: background-color .3s, 
+  opacity .5s, visibility .5s;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 1000;
+  -webkit-box-shadow: 0px 0px 9px 0px rgba(26,57,78,0.15); 
+  box-shadow: 0px 0px 9px 0px rgba(26,57,78,0.15);
+}
+.scroll-up::after {
+  content: "\f062";
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 2em;
+  line-height: 50px;
+  color: #9e9b9b;
+}
+
+.scroll-up::before {
+  content: "Ir arriba";
+  font-size: 14px;
+  color: #9e9b9b;
+  position: absolute;
+  width: 64px;
+  top: 52px;
+  left: -5px;
+}
+
+.scroll-up.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.asesor{
+  .main{
+    color: $blue;
+    .im{
+      font-size: 22px;
+      font-family: "Ford medium";
+    }
+    .name{
+      font-size: 46px;
+      font-family: "Ford medium";
+    }
+    .your{
+      font-size: 22px;
+      font-family: "Ford medium";
+    }
+    .description{
+      p{
+        color: $black;
+        font-size: 16px;
+        margin: 42px 0;
+      }
+      .btn{
+        width: 136px;
+        padding: 8px;
+        border-radius: 30px;
+        font-size: 42px;
+        margin-right: 35px;
+        line-height: 0;
+      }
+      .green{
+        background-color: #7ad06d;
+        border-color: #7ad06d;
+      }
+    }
+  }
+}
+
+.hero{
+  @include background-cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  height: 600px;
+  padding-top: 2%;
+  .hero-title{
+    color: $white;
+    font-size: 4vw;
+    font-family: "Ford Bold";
+    display: block;
+    text-align: center;
+    text-shadow: 2px 2px black;
+  }
+}
+
+.cars{
+  background-color: $white;
+  position: relative;
+  margin-top: -65px;
+  border-radius: 40px;
+  .cars-title{
+    color: $main-blue;
+    font-family: "Ford Light";
+    font-size: 32px;
+    margin-bottom: 90px;
+    display: block;
+    text-align: center;
+  }
+  #menu-cars{
+    .nav{
+      flex-direction: column;
+      .nav-item{
+        padding: 9px 0;
+        position: relative;
+        .nav-link{
+          color: $main-blue;
+          font-size: 16px;
+          display: inline-block;
+          padding: 0;
+          @include animacion;
+          position: relative;
+        }
+        .nav-link::after{
+          content: '';
+          display: block;
+          width: 0;
+          height: 4px;
+          background: #eaf5fa;
+          @include animacion;
+        }
+        .active{
+          color: $blue;
+          background-color: transparent;
+          border-width: thick;
+        }
+        .active::after{
+          width: 100%;
+          //transition: width .3s;
+        }
+        .nav-link:hover{
+          color: $blue;
+          background-color: transparent;
+          border-width: thick;
+          &:after{
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+  .main-content-cars{
+    .title-car{
+      font-family: "Ford Bold";
+      font-size: 20px;
+      padding: 28px 0;
+      display: block;
+      color: $blue;
+    }
+    .car-content{
+      .promo-car-image{
+        @include background-cover;
+        min-height: 900px;
+        background-position: center;
+      }
+      .description-car{
+        background-color: $white;
+        border-radius: 40px;
+        padding: 30px;
+        position: relative;
+        margin-top: -60px;
+        .button-car{
+          text-align: center;
+          width: 130px;
+          margin: 0 15px;
+          a{
+
+            background-color: $blue;
+            color: $white;
+            border: solid 1px $blue;            
+            display: block;
+            border-radius: 40px;
+            font-size: 18px;
+            @include animacion3;
+          }
+          span{
+            display: block;
+            color: $blue;
+            font-size: 14px;
+            margin: 11px 0;
+            @include animacion3;
+          }
+
+          &:hover{
+            a{
+              background-color: transparent;
+              color: #9e9b9b;
+              border: solid 1px #9e9b9b;
+            }
+            span{
+              color: #9e9b9b;
+            }
+          }
+        }
+      }
+      .terms{
+        span{
+          color: $blue;
+          font-size: 16px;
+          display: block;
+          margin: 15px 0;
+          cursor: pointer;
+          position: relative;
+          @include animacion;
+        }
+       
+        p{
+          margin-bottom: 60px;
+          font-size: 14px;
+          color: $main-blue;
+          text-align: justify;
+        }
+        hr{
+          border-top: 1px solid #dddddd;
+          margin: 60px 0;
+        }
+      }
+    }
+  }
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+[data-toggle="collapse"].collapsed .fa:before {
+  content: "\f067";
+  color: $blue;
+  @include animacion;
+  margin-right: 10px;
+}
+
+[data-toggle="collapse"] .fa:before {   
+  content: "\f068";
+  color: $blue;
+  @include animacion;
+  margin-right: 10px;
+}
+
+
+.contact-form{
+  padding-top: 0;
+  .sale-contact{
+    margin: 50px 0;
+    .sale-person{
+      text-align: center;
+      img{
+        max-width: 50px;
+      }
+    }
+    .sale-name{
+      span{
+        display: block;
+        color: $white;
+        font-size: 22px;
+        text-align: left;
+      }
+    }
+    .sale-buttons{
+      .btn{
+        width: 100%;
+        text-align: center;
+        padding: 14px 0px;
+        border-radius: 30px;
+        font-size: 32px;
+        line-height: 0;
+        display: inline-block;
+      }
+      .green{
+        background-color: #7ad06d;
+        border-color: #7ad06d;
+        color: $white;
+      }
+      .phone{
+        background-color: $white;
+        color: $blue;
+      }
+    }
+  }
+  .color-form{
+    padding: 90px 15px;
+    background-color: $main-blue;
+    border-radius: 40px;
+    .contact-title{
+      font-size: 32px;
+      color: $white;
+    }
+    p{
+      font-size: 16px;
+      color: $white;
+    }
+    .web-form{
+      .form-group{
+        label{
+          color: $white;
+          font-size: 16px;
+        }
+        input{
+          border-radius: 0;
+          font-size: 16px;
+          color: $main-blue;
+          height: 40px;
+        }
+      }
+      .send{
+        display: block;
+        width: 100%;
+        background-color: $blue;
+        color: $white;
+        border-radius: 30px;
+        padding: 20px 0;
+        font-size: 20px;
+        margin-top: 30px;
+      }
+    }
+  }
+}
+
+.map{
+  .map-title{
+    font-size: 32px;
+    color: $blue;
+    margin-bottom: 100px;
+  }
+
+  #map{
+    background-color: $blue;
+    width: 100%;
+    height: 245px;
+  }
+}
+
+footer{
+  text-align: center;
+  background-color: $main-blue;
+  padding: 20px 0;
+  a{
+    text-decoration: none;
+    font-size: 14px;
+    color: $white;
+  }
+}
+
+.socials{
+  position: fixed;
+  top: 40%;
+  left: 0;
+  z-index: 9999;
+  margin: 0;
+  padding: 0;
+  li{
+    list-style: none;
+    margin: 0;
+    text-align: center;
+    padding: 0;
+    a{
+      text-decoration: none;
+      padding: 15px;
+      background-color: $blue;
+      display: block;
+      @include animacion;
+      i{
+        color: $white;
+        font-size: 26px;
+        @include animacion;
+      }
+      &:hover{
+        i{
+          color: $white;
+        }
+      }
+    }
+    &:last-child{
+      border-bottom: none;
+    }
+    &:hover{
+      a{
+        background-color: $white;
+        i{
+          color: #9e9b9b;
+        }
+      }
+    }
+    #whatsapp-click{
+      background-color: #25D366;
+      &:hover{
+        background-color: $white;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .hero{
+    padding-top: 10%;
+  }
+  .socials{
+    left: 87%;
+  }
+  .name-distribuitor{
+    text-overflow: clip;
+    white-space: initial;
+    font-size: 18px;
+  }
+  section{
+    padding: 60px 0
+  }
+  .asesor{
+    .image-mobile{
+      max-width: 140px;
+      float: left;
+      margin-right: 30px;
+      padding-bottom: 60px;
+    }
+    .main{
+      .im{
+        font-size: 20px;
+        font-family: "Ford medium";
+      }
+      .name{
+        font-size: 36px;
+        font-family: "Ford medium";
+      }
+      .your{
+        font-size: 20px;
+        font-family: "Ford medium";
+      }
+      .description .btn{
+        width: 46%;
+        margin-right: 0px;
+      }
+      .description .btn-outline-primary{
+        margin-right: 15px;
+      }
+    }
+  }
+  .hero{
+    height: 325px;
+    background-position: 64% 0%;
+  }
+  .cars #menu-cars .nav{
+    width: 100%;
+    padding: 0;
+    .nav-item{
+      border-bottom: 1px solid #dddddd;
+      padding: 20px 0;
+      .nav-link{
+        line-height: 0;
+      }
+    }
+    .nav-item:first-child{
+      border-top: 1px solid #dddddd;
+    }
+  }
+  .cars .main-content-cars .car-content{
+    .promo-car-image{
+      min-height: 425px;
+      background-position: top;
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+  
+    .description-car{
+      padding: 20px 0px;
+      margin-top: -28px;
+      border-radius: 32px;
+      .button-car {
+        text-align: center;
+        width: 100%;
+        margin: 0 5px;
+        span {
+          font-size: 12px;
+        }
+      }
+    }
+    .terms hr{
+      margin: 30px 0;
+    }
+  }
+  .contact-form{
+    padding: 0;
+  }
+  .contact-form .color-form{
+    padding: 80px 15px;
+  }
+  .space-30{
+    margin-top: 30px;
+  }
+  .contact-form .color-form .web-form .send{
+    margin-top: 60px;
+  }
+  .map .map-title{
+    margin-bottom: 60px;
+  }
+  .last-logo{
+    margin-top: 60px;
+  }
+
+  .hero{
+    .hero-title{
+      font-size: 6vw;
+    }
+  }
+}
+
+@media only screen and (min-width: 601px ) {
+  .hero{
+    padding-top: 8%;
+  }
+  .hero{
+    
+    .hero-title{
+      font-size: 6vw;
+    }
+  }
+}
+
+@media only screen and (min-width: 800px ) {
+  .hero{
+    
+    .hero-title{
+      font-size: 5vw;
+    }
+  }
+}
+@media only screen and (min-width: 900px ) {
+  .hero{
+    padding-top: 3%;
+    
+    .hero-title{
+      font-size: 5vw;
+    }
+  }
+}
+@media only screen and (min-width: 1024px ) {
+  .hero{
+    padding-top: 3%;
+  } 
+  .cars .main-content-cars .car-content{
+    .promo-car-image{
+      min-height: 750px;
+    }
+  }
+  .hero{
+    .hero-title{
+      font-size: 4vw;
+    }
+  }
+}
+@media only screen and (min-width: 1200px ) {
+  .hero{
+    background-position: 0% 16%;
+  }
+  .cars .main-content-cars .car-content{
+    .promo-car-image{
+      min-height: 900px;
+    }
+  }
+}
+
+@media only screen and (min-width: 1415px ) {
+  .cars .main-content-cars .car-content{
+    .promo-car-image{
+      min-height: 900px;
+    }
+  }
+  .hero{
+    background-position: 0% 42%;
+    height: 600px;
+    .hero-title{
+      font-size: 3vw;
+    }
+  }
+}
+@media only screen and (min-width: 1600px ) {
+
+  .hero{
+    background-position: 0% 42%;
+    height: 600px;
+    .hero-title{
+      font-size: 2vw;
+    }
+  }
+}
+
+.onclic {
+  width: 40px !important;
+  height: 40px !important;
+  background-color: $blue !important;
+  border-radius: 50%;
+  border-color: $white !important;
+  border-width: 3px;
+  font-size: 0;
+  padding: 20px !important;
+  border-left-color: $main-blue !important;
+  animation: rotating 2s 0.25s linear infinite;
+
+  &:after {
+    content: "";
+  }
+  &:hover {
+    color: $main-blue;
+    background: $blue;
+  }
+}
+
+.termsadn{
+  text-align: left;
+    color: $white;
+    font-size: 16px;
+    margin: 15px 0;
+}
+
+@keyframes rotating {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.alert{
+  width:400px;
+  position:fixed;
+  bottom:10px;
+  right:10px;
+  z-index: 9999;
+}

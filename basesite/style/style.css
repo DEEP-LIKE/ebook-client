@@ -1,0 +1,657 @@
+body {
+  padding-top: 78px;
+}
+
+.sticky-top {
+  top: 12%;
+}
+
+.bg-light {
+  background-color: #ffffff !important;
+}
+
+.name-distribuitor {
+  position: relative;
+  display: block;
+  margin-left: 10px;
+  color: #00244b;
+}
+
+section {
+  padding: 90px 0;
+}
+
+.scroll-up {
+  display: inline-block;
+  background-color: #ffffff;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  text-align: center;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  transition: background-color 0.3s, opacity 0.5s, visibility 0.5s;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 1000;
+  box-shadow: 0px 0px 9px 0px rgba(26, 57, 78, 0.15);
+}
+
+.scroll-up::after {
+  content: "\f062";
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 2em;
+  line-height: 50px;
+  color: #9e9b9b;
+}
+
+.scroll-up::before {
+  content: "Ir arriba";
+  font-size: 14px;
+  color: #9e9b9b;
+  position: absolute;
+  width: 64px;
+  top: 52px;
+  left: -5px;
+}
+
+.scroll-up.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.asesor .main {
+  color: #2e99d1;
+}
+.asesor .main .im {
+  font-size: 22px;
+  font-family: "Ford medium";
+}
+.asesor .main .name {
+  font-size: 46px;
+  font-family: "Ford medium";
+}
+.asesor .main .your {
+  font-size: 22px;
+  font-family: "Ford medium";
+}
+.asesor .main .description p {
+  color: #202020;
+  font-size: 16px;
+  margin: 42px 0;
+}
+.asesor .main .description .btn {
+  width: 136px;
+  padding: 8px;
+  border-radius: 30px;
+  font-size: 42px;
+  margin-right: 35px;
+  line-height: 0;
+}
+.asesor .main .description .green {
+  background-color: #7ad06d;
+  border-color: #7ad06d;
+}
+
+.hero {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  height: 600px;
+  padding-top: 2%;
+}
+.hero .hero-title {
+  color: #ffffff;
+  font-size: 4vw;
+  font-family: "Ford Bold";
+  display: block;
+  text-align: center;
+  text-shadow: 2px 2px black;
+}
+
+.cars {
+  background-color: #ffffff;
+  position: relative;
+  margin-top: -65px;
+  border-radius: 40px;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.cars .cars-title {
+  color: #00244b;
+  font-family: "Ford Light";
+  font-size: 32px;
+  margin-bottom: 90px;
+  display: block;
+  text-align: center;
+}
+.cars #menu-cars .nav {
+  flex-direction: column;
+}
+.cars #menu-cars .nav .nav-item {
+  padding: 9px 0;
+  position: relative;
+}
+.cars #menu-cars .nav .nav-item .nav-link {
+  color: #00244b;
+  font-size: 16px;
+  display: inline-block;
+  padding: 0;
+  transition: all 0.5s;
+  position: relative;
+  text-transform: uppercase;
+}
+.cars #menu-cars .nav .nav-item .nav-link::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 4px;
+  background: #eaf5fa;
+  transition: all 0.5s;
+}
+.cars #menu-cars .nav .nav-item .active {
+  color: #2e99d1;
+  background-color: transparent;
+  border-width: thick;
+}
+.cars #menu-cars .nav .nav-item .active::after {
+  width: 100%;
+}
+.cars #menu-cars .nav .nav-item .nav-link:hover {
+  color: #2e99d1;
+  background-color: transparent;
+  border-width: thick;
+}
+.cars #menu-cars .nav .nav-item .nav-link:hover:after {
+  width: 100%;
+}
+.cars .main-content-cars .title-car {
+  font-family: "Ford Bold";
+  font-size: 20px;
+  padding: 28px 0;
+  display: block;
+  color: #2e99d1;
+  text-transform: uppercase;
+}
+.cars .main-content-cars .car-content .promo-car-image {
+  background-size: cover;
+  min-height: 900px;
+  background-position: center;
+}
+.cars .main-content-cars .car-content .description-car {
+  background-color: #ffffff;
+  border-radius: 40px;
+  padding: 30px;
+  position: relative;
+  margin-top: -60px;
+}
+.cars .main-content-cars .car-content .description-car .button-car {
+  text-align: center;
+  width: 130px;
+  margin: 0 15px;
+}
+.cars .main-content-cars .car-content .description-car .button-car a {
+  background-color: #2e99d1;
+  color: #ffffff;
+  border: solid 1px #2e99d1;
+  display: block;
+  border-radius: 40px;
+  font-size: 18px;
+  transition: all 0.2s;
+}
+.cars .main-content-cars .car-content .description-car .button-car span {
+  display: block;
+  color: #2e99d1;
+  font-size: 14px;
+  margin: 11px 0;
+  transition: all 0.2s;
+}
+.cars .main-content-cars .car-content .description-car .button-car:hover a {
+  background-color: transparent;
+  color: #9e9b9b;
+  border: solid 1px #9e9b9b;
+}
+.cars .main-content-cars .car-content .description-car .button-car:hover span {
+  color: #9e9b9b;
+}
+.cars .main-content-cars .car-content .description-car .button-promo {
+  width: 300px;
+}
+.cars .main-content-cars .car-content .terms span {
+  color: #2e99d1;
+  font-size: 16px;
+  display: block;
+  margin: 15px 0;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.5s;
+}
+.cars .main-content-cars .car-content .terms p {
+  margin-bottom: 60px;
+  font-size: 14px;
+  color: #00244b;
+  text-align: justify;
+}
+.cars .main-content-cars .car-content .terms hr {
+  border-top: 1px solid #dddddd;
+  margin: 60px 0;
+}
+
+[data-toggle=collapse].collapsed .fa:before {
+  content: "\f067";
+  color: #2e99d1;
+  transition: all 0.5s;
+  margin-right: 10px;
+}
+
+[data-toggle=collapse] .fa:before {
+  content: "\f068";
+  color: #2e99d1;
+  transition: all 0.5s;
+  margin-right: 10px;
+}
+
+.contact-form {
+  padding-top: 0;
+}
+.contact-form .sale-contact {
+  margin: 50px 0;
+}
+.contact-form .sale-contact .sale-person {
+  text-align: center;
+}
+.contact-form .sale-contact .sale-person img {
+  max-width: 50px;
+}
+.contact-form .sale-contact .sale-name span {
+  display: block;
+  color: #ffffff;
+  font-size: 22px;
+  text-align: left;
+}
+.contact-form .sale-contact .sale-buttons .btn {
+  width: 100%;
+  text-align: center;
+  padding: 14px 0px;
+  border-radius: 30px;
+  font-size: 32px;
+  line-height: 0;
+  display: inline-block;
+}
+.contact-form .sale-contact .sale-buttons .green {
+  background-color: #7ad06d;
+  border-color: #7ad06d;
+  color: #ffffff;
+}
+.contact-form .sale-contact .sale-buttons .phone {
+  background-color: #ffffff;
+  color: #2e99d1;
+}
+.contact-form .color-form {
+  padding: 90px 15px;
+  background-color: #00244b;
+  border-radius: 40px;
+}
+.contact-form .color-form .contact-title {
+  font-size: 32px;
+  color: #ffffff;
+}
+.contact-form .color-form p {
+  font-size: 16px;
+  color: #ffffff;
+}
+.contact-form .color-form .web-form .form-group label {
+  color: #ffffff;
+  font-size: 16px;
+}
+.contact-form .color-form .web-form .form-group input {
+  border-radius: 0;
+  font-size: 16px;
+  color: #00244b;
+  height: 40px;
+}
+.contact-form .color-form .web-form .send {
+  display: block;
+  width: 100%;
+  background-color: #2e99d1;
+  color: #ffffff;
+  border-radius: 30px;
+  padding: 20px 0;
+  font-size: 20px;
+  margin-top: 30px;
+}
+
+.map .map-title {
+  font-size: 32px;
+  color: #2e99d1;
+  margin-bottom: 30px;
+}
+.map .description-map {
+  margin-bottom: 100px;
+}
+.map #map {
+  background-color: #2e99d1;
+  width: 100%;
+  height: 245px;
+}
+.map .button-location {
+  text-align: center;
+  width: 130px;
+  margin: 0 15px;
+}
+.map .button-location a {
+  background-color: #2e99d1;
+  color: #ffffff;
+  border: solid 1px #2e99d1;
+  display: block;
+  border-radius: 40px;
+  font-size: 18px;
+  transition: all 0.2s;
+}
+.map .button-location span {
+  display: block;
+  color: #2e99d1;
+  font-size: 14px;
+  margin: 11px 0;
+  transition: all 0.2s;
+}
+.map .button-location:hover a {
+  background-color: transparent;
+  color: #9e9b9b;
+  border: solid 1px #9e9b9b;
+}
+.map .button-location:hover span {
+  color: #9e9b9b;
+}
+.map .button-promo {
+  width: 300px;
+}
+
+footer {
+  text-align: center;
+  background-color: #00244b;
+  padding: 20px 0;
+}
+footer a {
+  text-decoration: none;
+  font-size: 14px;
+  color: #ffffff;
+}
+
+.socials {
+  position: fixed;
+  top: 40%;
+  left: 0;
+  z-index: 9999;
+  margin: 0;
+  padding: 0;
+}
+.socials li {
+  list-style: none;
+  margin: 0;
+  text-align: center;
+  padding: 0;
+}
+.socials li a {
+  text-decoration: none;
+  padding: 15px;
+  background-color: #2e99d1;
+  display: block;
+  transition: all 0.5s;
+}
+.socials li a i {
+  color: #ffffff;
+  font-size: 26px;
+  transition: all 0.5s;
+}
+.socials li a:hover i {
+  color: #ffffff;
+}
+.socials li:last-child {
+  border-bottom: none;
+}
+.socials li:hover a, .socials li:active a {
+  background-color: #ffffff;
+}
+.socials li:hover a i, .socials li:active a i {
+  color: #9e9b9b;
+}
+.socials li #whatsapp-click {
+  background-color: #25d366;
+}
+.socials li #whatsapp-click:hover {
+  background-color: #ffffff;
+}
+
+@media only screen and (max-width: 600px) {
+  .hero {
+    padding-top: 10%;
+  }
+  .socials {
+    left: 87%;
+  }
+  .name-distribuitor {
+    text-overflow: clip;
+    white-space: initial;
+    font-size: 18px;
+  }
+  section {
+    padding: 60px 0;
+  }
+  .asesor .image-mobile {
+    max-width: 140px;
+    margin-right: 30px;
+    padding-bottom: 60px;
+  }
+  .asesor .main .im {
+    font-size: 20px;
+    font-family: "Ford medium";
+  }
+  .asesor .main .name {
+    font-size: 36px;
+    font-family: "Ford medium";
+  }
+  .asesor .main .your {
+    font-size: 20px;
+    font-family: "Ford medium";
+  }
+  .asesor .main .description .btn {
+    width: 46%;
+    margin-right: 0px;
+  }
+  .asesor .main .description .btn-outline-primary {
+    margin-right: 15px;
+  }
+  .hero {
+    height: 325px;
+    background-position: 64% 0%;
+  }
+  .cars #menu-cars .nav {
+    width: 100%;
+    padding: 0;
+  }
+  .cars #menu-cars .nav .nav-item {
+    border-bottom: 1px solid #dddddd;
+    padding: 20px 0;
+  }
+  .cars #menu-cars .nav .nav-item .nav-link {
+    line-height: 0;
+  }
+  .cars #menu-cars .nav .nav-item:first-child {
+    border-top: 1px solid #dddddd;
+  }
+  .cars .main-content-cars .car-content .promo-car-image {
+    min-height: 425px;
+    background-position: top;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  .cars .main-content-cars .car-content .description-car {
+    padding: 20px 0px;
+    margin-top: -28px;
+    border-radius: 32px;
+  }
+  .cars .main-content-cars .car-content .description-car .button-car {
+    text-align: center;
+    width: 100%;
+    margin: 0 5px;
+  }
+  .cars .main-content-cars .car-content .description-car .button-car span {
+    font-size: 12px;
+  }
+  .cars .main-content-cars .car-content .terms hr {
+    margin: 30px 0;
+  }
+  .contact-form {
+    padding: 0;
+  }
+  .contact-form .color-form {
+    padding: 80px 15px;
+  }
+  .space-30 {
+    margin-top: 30px;
+  }
+  .contact-form .color-form .web-form .send {
+    margin-top: 60px;
+  }
+  .map .map-title {
+    margin-bottom: 60px;
+  }
+  .last-logo {
+    margin-top: 60px;
+  }
+  .hero .hero-title {
+    font-size: 6vw;
+  }
+  .socials li {
+    position: relative;
+  }
+  .socials li a {
+    text-decoration: none;
+  }
+  .socials li:last-child {
+    border-bottom: none;
+  }
+  .socials li:hover a, .socials li:active a {
+    background-color: #25d366;
+  }
+  .socials li:hover a i, .socials li:active a i {
+    color: #ffffff;
+  }
+  .socials li #whatsapp-click {
+    background-color: #25d366;
+  }
+  .socials li #whatsapp-click:hover {
+    background-color: #25d366;
+    color: #ffffff;
+  }
+  .socials li #whatsapp-click:hover i {
+    color: #ffffff;
+  }
+}
+@media only screen and (min-width: 601px) {
+  .hero {
+    padding-top: 8%;
+  }
+  .hero .hero-title {
+    font-size: 6vw;
+  }
+}
+@media only screen and (min-width: 800px) {
+  .hero .hero-title {
+    font-size: 5vw;
+  }
+}
+@media only screen and (min-width: 900px) {
+  .hero {
+    padding-top: 3%;
+  }
+  .hero .hero-title {
+    font-size: 5vw;
+  }
+}
+@media only screen and (min-width: 1024px) {
+  .hero {
+    padding-top: 3%;
+  }
+  .cars .main-content-cars .car-content .promo-car-image {
+    min-height: 750px;
+  }
+  .hero .hero-title {
+    font-size: 4vw;
+  }
+}
+@media only screen and (min-width: 1200px) {
+  .hero {
+    background-position: 0% 16%;
+  }
+  .cars .main-content-cars .car-content .promo-car-image {
+    min-height: 900px;
+  }
+}
+@media only screen and (min-width: 1415px) {
+  .cars .main-content-cars .car-content .promo-car-image {
+    min-height: 900px;
+  }
+  .hero {
+    background-position: 0% 42%;
+    height: 600px;
+  }
+  .hero .hero-title {
+    font-size: 3vw;
+  }
+}
+@media only screen and (min-width: 1600px) {
+  .hero {
+    background-position: 0% 42%;
+    height: 600px;
+  }
+  .hero .hero-title {
+    font-size: 2vw;
+  }
+}
+.onclic {
+  width: 40px !important;
+  height: 40px !important;
+  background-color: #2e99d1 !important;
+  border-radius: 50%;
+  border-color: #ffffff !important;
+  border-width: 3px;
+  font-size: 0;
+  padding: 20px !important;
+  border-left-color: #00244b !important;
+  animation: rotating 2s 0.25s linear infinite;
+}
+.onclic:after {
+  content: "";
+}
+.onclic:hover {
+  color: #00244b;
+  background: #2e99d1;
+}
+
+.termsadn {
+  text-align: left;
+  color: #ffffff;
+  font-size: 16px;
+  margin: 15px 0;
+}
+
+@keyframes rotating {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.alert {
+  width: 400px;
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  z-index: 9999;
+}/*# sourceMappingURL=style.css.map */
