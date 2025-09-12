@@ -149,7 +149,8 @@ final class Some extends Option
         return $this;
     }
 
-    public function getIterator()
+    #[\ReturnTypeWillChange]
+    public function getIterator() 
     {
         return new ArrayIterator([$this->value]);
     }
