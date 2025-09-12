@@ -126,8 +126,9 @@ class functions{
                 $currentDomain = $_SERVER['HTTP_HOST'];
                 $pageUrl = "https://".$folderName.".".$currentDomain;
             } else {
-                $pageUrl = $_ENV['LOCAL_URL']."activos/".$folderName;
+                $pageUrl = $_ENV['APP_URL']."/activos/".$folderName;
             }
+            
             $html .= "<div><a target='_blank' href='".$pageUrl."' >".$pageUrl."</a></div>";
         }
 
