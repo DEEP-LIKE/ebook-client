@@ -122,7 +122,9 @@ class functions{
 
             // Generar la URL del sitio
             if (isset($_ENV['ENV']) && $_ENV['ENV'] === 'production') {
-                $pageUrl = "https://".$folderName.".ebookford.com";
+                // Usa el dominio actual en lugar de ebookford.com
+                $currentDomain = $_SERVER['HTTP_HOST'];
+                $pageUrl = "https://".$folderName.".".$currentDomain;
             } else {
                 $pageUrl = $_ENV['LOCAL_URL']."activos/".$folderName;
             }
