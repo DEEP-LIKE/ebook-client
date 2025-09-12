@@ -49,7 +49,7 @@ $host = $_SERVER['HTTP_HOST'];
 $subdomain = explode('.', $host)[0];
 
 // Si es un dominio principal, mostrar la interfaz de administración
-if (in_array($host, MAIN_DOMINIOS)) {
+if (in_array($host, MAIN_DOMAINS)) {
     display_admin_interface($inputFileName);
     exit;
 }
