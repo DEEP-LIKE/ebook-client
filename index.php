@@ -136,7 +136,9 @@ function display_admin_interface($inputFileName, $validSubdomains) {
             <p><strong>Subdominios activos:</strong></p>
             <ul>
                 <?php foreach ($validSubdomains as $sub): ?>
-                <li><?php echo $sub; ?>.ebookford.com</li>
+                  <a href='https://<?php echo $sub; ?>.ebookford.com' target="_blank">
+                      <?php echo $sub; ?>.ebookford.com
+                  </a>
                 <?php endforeach; ?>
             </ul>
         </div>
