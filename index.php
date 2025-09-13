@@ -100,8 +100,8 @@ function display_admin_interface($inputFileName) {
         <div class="form-container">
             <h2>Subir nuevo sitio</h2>
             <form enctype="multipart/form-data" method="post" action="#" id="loadFileForm">
-                <label>Selecciona el archivo ZIP a subir: 
-                    <input type="file" name="<?php echo $inputFileName ?>" accept=".jpg.png" />
+                <label>Selecciona una imagen  a subir: 
+                    <input type="file" name="<?php echo $inputFileName ?>" accept="image/*" />
                 </label>
                 <br /><br />
                 <input type="submit" name="submit" value="Subir archivo" onclick='upload_image();' />
