@@ -28,14 +28,14 @@ $inputFileName = 'zip_file';
 // -------------------------------------------------------------------------
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES[$inputFileName]["name"])) {
     header('Content-Type: application/json');
-    
+
     // Validación de seguridad adicional
-    if (!in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1']) && 
+    if (!in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1']) &&
         !isset($_SERVER['HTTP_X_EASYPANEL_REQUEST'])) {
         echo json_encode(['success' => false, 'message' => 'Acceso no autorizado']);
         exit;
     }
-    
+
     $functions = new functions();
     $process = $functions->uploadSites();
     echo json_encode($process);
@@ -48,14 +48,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES[$inputFileName]["name
 $host = $_SERVER['HTTP_HOST'];
 $subdomain = explode('.', $host)[0];
 
+// Obtener la lista dinámica de subdominios válidos
+$validSubdomains = get_valid_subdomains();
+
 // Si es un dominio principal, mostrar la interfaz de administración
 if (in_array($host, MAIN_DOMAINS)) {
-    display_admin_interface($inputFileName);
+    display_admin_interface($inputFileName, $validSubdomains);
     exit;
 }
 
 // Si es un subdominio válido, servir el sitio correspondiente
-if (in_array($subdomain, VALID_SUBDOMAINS)) {
+if (in_array($subdomain, $validSubdomains)) {
     serve_subdomain_site($subdomain);
     exit;
 }
@@ -69,7 +72,22 @@ exit;
 // -------------------------------------------------------------------------
 // FUNCIONES AUXILIARES
 // -------------------------------------------------------------------------
-function display_admin_interface($inputFileName) {
+/**
+ * Obtiene la lista de subdominios válidos leyendo los directorios en ACTIVOS_PATH.
+ * @return array
+ */
+function get_valid_subdomains() {
+    $subdomains = [];
+    if (is_dir(ACTIVOS_PATH)) {
+        $folders = array_filter(glob(ACTIVOS_PATH . '*'), 'is_dir');
+        foreach ($folders as $folder) {
+            $subdomains[] = basename($folder);
+        }
+    }
+    return $subdomains;
+}
+
+function display_admin_interface($inputFileName, $validSubdomains) {
     // HTML para la interfaz de administración
     ?>
 <!DOCTYPE html>
@@ -96,28 +114,28 @@ function display_admin_interface($inputFileName) {
             <h1>Ford eBook - Panel de Administración</h1>
             <p>Gestión de sitios para concesionarios</p>
         </div>
-        
+
         <div class="form-container">
             <h2>Subir nuevo sitio</h2>
             <form enctype="multipart/form-data" method="post" action="#" id="loadFileForm">
-                <label>Selecciona una imagen  a subir: 
+                <label>Selecciona una imagen a subir:
                     <input type="file" name="<?php echo $inputFileName ?>" accept="image/*" />
                 </label>
                 <br /><br />
                 <input type="submit" name="submit" value="Subir archivo" onclick='upload_image();' />
             </form>
-            
+
             <div class='progress' id="progress_div">
                 <div class='bar' id='bar'></div>
                 <div class='percent' id='percent'>0%</div>
             </div>
             <div id='results'></div>
         </div>
-        
+
         <div style="margin-top: 30px; font-size: 14px; color: #666;">
             <p><strong>Subdominios activos:</strong></p>
             <ul>
-                <?php foreach (VALID_SUBDOMAINS as $sub): ?>
+                <?php foreach ($validSubdomains as $sub): ?>
                 <li><?php echo $sub; ?>.ebookford.com</li>
                 <?php endforeach; ?>
             </ul>
@@ -132,7 +150,7 @@ function serve_subdomain_site($subdomain) {
     // USAR EL NOMBRE COMPLETO DEL SUBDOMINIO COMO CARPETA
     $folderName = $subdomain;
     $sitePath = ACTIVOS_PATH . $folderName;
-    
+
     // Verificar si existe el directorio
     if (!is_dir($sitePath)) {
         http_response_code(404);
@@ -142,7 +160,7 @@ function serve_subdomain_site($subdomain) {
         echo "<p>Contacta al administrador si crees que esto es un error.</p>";
         exit;
     }
-    
+
     // Servir el index.html del subdominio
     $indexFile = $sitePath . '/index.html';
     if (file_exists($indexFile)) {

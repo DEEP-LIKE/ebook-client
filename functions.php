@@ -128,7 +128,7 @@ class functions{
             } else {
                 $pageUrl = $_ENV['APP_URL']."/activos/".$folderName;
             }
-            
+
             $html .= "<div><a target='_blank' href='".$pageUrl."' >".$pageUrl."</a></div>";
         }
 
@@ -240,7 +240,7 @@ class functions{
                                     'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
                                     'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o',
                                     'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y' );
-        
+
         $jsonArray['cars'] = []; // Initialize cars array to ensure it's always an array
 
         foreach ($jsonCars as $jsonCar){
@@ -248,10 +248,10 @@ class functions{
                 error_log("Skipping car due to missing images data: " . json_encode($jsonCar));
                 continue; // Saltar si no hay imágenes o datos de imagen incompletos
             }
-            
+
             $images = $jsonCar['images'];
             $basePath = "./activos/". $folderName. "/images/cars/".$images[0]['filename'];
-            
+
             // Crear directorio si no existe
             $directory = dirname($basePath);
             if (!is_dir($directory)) {
@@ -260,9 +260,9 @@ class functions{
                     continue; // Skip car if directory creation fails
                 }
             }
-            
+
             self::saveImage($images[0]['src'], $basePath);
-            
+
             $car = Array();
             $cleanCarName = strtr( $jsonCar['name'], $unwanted_array );
             $lowerName = strtolower($cleanCarName);
@@ -273,7 +273,7 @@ class functions{
             $car['manejo'] = isset($jsonCar['manejo']) ? $jsonCar['manejo'] : '';
             $car['more'] = isset($jsonCar['more']) ? $jsonCar['more'] : '';
             $car['image'] = $images[0]['filename'];
-            
+
             $terms = isset($jsonCar['terms']) ? $jsonCar['terms'] : '';
             $finalTerms = $terms;
             if (!empty($terms)) {
@@ -290,7 +290,7 @@ class functions{
                 }
             }
             $car['terms'] = $finalTerms;
-            
+
             $jsonArray['cars'][$index] = $car;
             $index += 1;
         }
@@ -300,16 +300,16 @@ class functions{
 
     protected function processJson($folderName, $siteImages){
         $jsonFilePath = "./activos/". $folderName ."/json/ford.json";
-        
+
         // Verificar que el archivo existe antes de procesarlo
         if (!file_exists($jsonFilePath)) {
             error_log("Archivo JSON no encontrado: " . $jsonFilePath);
             return;
         }
-        
+
         $string = file_get_contents($jsonFilePath);
         $jsonArray = json_decode($string, true);
-        
+
         // Verificar que el JSON se decodificó correctamente
         if ($jsonArray === null) {
             error_log("Error decodificando JSON del archivo: " . $jsonFilePath . ". Raw content: " . $string);
@@ -378,7 +378,7 @@ class functions{
             error_log("Carpeta base no encontrada: " . $baseFolder);
             return false;
         }
-        
+
         // Eliminar la carpeta destino si ya existe para asegurar una copia limpia
         if (is_dir($copyTo)) {
             error_log("Carpeta destino ya existe, eliminando: " . $copyTo);
@@ -390,7 +390,7 @@ class functions{
 
         error_log("Iniciando copia de: " . $baseFolder . " a: " . $copyTo);
         $result = self::recurseCopy($baseFolder, $copyTo);
-        
+
         if ($result && is_dir($copyTo)) {
             error_log("Carpeta clonada exitosamente: " . $folderName);
             return true;
