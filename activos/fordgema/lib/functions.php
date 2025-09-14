@@ -14,18 +14,37 @@ function read_json($path = './json/ford.json') {
         $url = $_ENV['API_URL']. '/sites/json/'.$folderName;
         $result = file_get_contents($url);
         $json = json_decode($result, true);
+
+        if ($json === null) {
+            error_log("Error decodificando JSON. No se puede crear el archivo.");
+            return (object)[]; // Devolver un objeto vacío para evitar errores
+        }
+
         $copyJson = $json;
-        $fileName = $json['header']['imagen']['filename'];
-        $copyJson['header']['imagen'] = $fileName;
-        $pathPortada = "./images/background/".$fileName;
-        file_put_contents($pathPortada, file_get_contents($json['header']['imagen']['src']));
-        $fileName = $json['title']['opengraph']['filename'];
-        $copyJson['title']['opengraph'] = $fileName;
-        $pathOpengrah = "./".$fileName;
-        file_put_contents($pathOpengrah, file_get_contents($json['title']['opengraph']['src']));
+
+        // Asegúrate de que las propiedades del título existen antes de usarlas
+        $titleData = isset($json['title']) ? $json['title'] : [];
+        $headerData = isset($json['header']) ? $json['header'] : [];
+
+        $fileName = isset($headerData['imagen']['filename']) ? $headerData['imagen']['filename'] : '';
+        if ($fileName) {
+            $copyJson['header']['imagen'] = $fileName;
+            $pathPortada = "./images/background/".$fileName;
+            file_put_contents($pathPortada, file_get_contents($headerData['imagen']['src']));
+        }
+
+        $fileName = isset($titleData['opengraph']['filename']) ? $titleData['opengraph']['filename'] : '';
+        if ($fileName) {
+            $copyJson['title']['opengraph'] = $fileName;
+            $pathOpengrah = "./".$fileName;
+            file_put_contents($pathOpengrah, file_get_contents($titleData['opengraph']['src']));
+        }
+
         unset($copyJson['cars']);
         $cars = [];
-        foreach ($json['cars'] as $car) {
+        // Asegúrate de que los carros existen antes de iterar
+        $jsonCars = isset($json['cars']) ? $json['cars'] : [];
+        foreach ($jsonCars as $car) {
             $cleanCarName = strtr( $car['name'], $unwanted_array );
             $lowerName = strtolower($cleanCarName);
             $carName = str_replace('ford ', '', $lowerName);
@@ -35,15 +54,14 @@ function read_json($path = './json/ford.json') {
             $cars[] = $car;
         }
         $copyJson['cars'] = $cars;
+
+        // AÑADE ESTA LÍNEA PARA INCLUIR LA PROPIEDAD site_url
+        $copyJson['title']['site_url'] = 'https://' . $folderName . '.ebookford.com';
+
         file_put_contents($jsonFilePath, json_encode($copyJson));
         $json = file_get_contents($path);
     }
-    // Aseguramos que $json es un objeto válido antes de continuar
-    $decodedJson = json_decode($json);
-    if ($decodedJson === null) {
-        return (object) [];
-    }
-    return $decodedJson;
+    return json_decode($json);
 }
 
 /******** Sections ********/
