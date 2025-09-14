@@ -38,7 +38,12 @@ function read_json($path = './json/ford.json') {
         file_put_contents($jsonFilePath, json_encode($copyJson));
         $json = file_get_contents($path);
     }
-    return json_decode($json);
+    // Aseguramos que $json es un objeto válido antes de continuar
+    $decodedJson = json_decode($json);
+    if ($decodedJson === null) {
+        return (object) [];
+    }
+    return $decodedJson;
 }
 
 /******** Sections ********/
@@ -46,79 +51,65 @@ function read_json($path = './json/ford.json') {
 //title
 function get_title() {
     $json = read_json();
-    $title = $json->title;
-    return $title;
+    return isset($json->title) ? $json->title : (object) ['title' => ''];
 }
 // header
 function get_header() {
     $json = read_json();
-    $header = $json->header;
-    return $header;
+    return isset($json->header) ? $json->header : (object) ['title' => '', 'imagen' => ''];
 }
-// asesor 
+// asesor
 function get_asesor() {
     $json = read_json();
-    $asesor = $json->asesor;
-    return $asesor;
+    return isset($json->asesor) ? $json->asesor : (object) ['name' => '', 'picture' => '', 'tel' => '', 'whats' => '', 'textw' => '', 'avalible' => false];
 }
-// Cars 
+// Cars
 function get_summary_cars() {
     $json = read_json();
-    $cars =  $json->cars;
-    return $cars;
+    return isset($json->cars) ? $json->cars : [];
 }
 
-// map 
+// map
 function get_map() {
     $json = read_json();
-    $map =  $json->map;
-    return $map;
+    return isset($json->map) ? $json->map : '';
 }
-// map 
+// terms
 function get_terms() {
     $json = read_json();
-    $terms =  $json->terms;
-    return $terms;
+    return isset($json->terms) ? $json->terms : '';
 }
 
 //mails
 function getEmails($path = './json/ford.json') {
     $json = read_json($path);
-    $emails = $json->email;
-    return $emails;
+    return isset($json->email) ? $json->email : [];
 }
 
 function get_whats() {
     $json = read_json();
-    $whatsapp =  $json->whatsapp;
-    return $whatsapp;
+    return isset($json->whatsapp) ? $json->whatsapp : '';
 }
 
 function get_face() {
     $json = read_json();
-    $facebook =  $json->facebook;
-    return $facebook;
+    return isset($json->facebook) ? $json->facebook : '';
 }
 
+// Promotion
 function get_summary_promotion() {
     $json = read_json();
-    if (isset($json->promos)) {
-        return $json->promos;
-    }
-    // Si la propiedad 'promos' no existe, retorna un array vacío para evitar el error
-    return [];
+    return isset($json->promos) ? $json->promos : [];
 }
 
 // Mapurl
 function get_urlmap() {
     $json = read_json();
-    $urlmap =  $json->urlmap;
-    return $urlmap;
+    return isset($json->urlmap) ? $json->urlmap : '';
 }
 
-// waze 
+// waze
 function get_waze() {
     $json = read_json();
-    $waze =  $json->waze;
-    return $waze;
+    return isset($json->waze) ? $json->waze : '';
 }
