@@ -166,7 +166,7 @@ function serve_subdomain_site($subdomain) {
     }
 
     // Servir el index.html del subdominio
-    $indexFile = $sitePath . '/index.html';
+    $indexFile = $sitePath . '/index.php';
     if (file_exists($indexFile)) {
         // Headers para caching optimizado (ajustar según necesidades)
         header('Cache-Control: public, max-age=3600'); // Cache de 1 hora
