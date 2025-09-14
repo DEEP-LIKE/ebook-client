@@ -32,7 +32,8 @@
   <meta property="og:description" content="<?php echo $header->title; ?>" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="<?php echo $title_site->site_url; ?>" />
-  <meta property="og:image" content="<?php echo $title_site->site_url . '/' . $title_site->opengraph; ?>" />
+
+  <meta property="og:image" content="https://ebookford.com/activos/<?php echo $title_site->id . '/' . $title_site->opengraph; ?>" />
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-65395108-51"></script>

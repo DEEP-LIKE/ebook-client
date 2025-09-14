@@ -20,7 +20,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <base href="/activos/<?php echo $title_site->id; ?>/">
   <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico">
-  <base href="/activos/<?php echo $title_site->id; ?>/">
   <title><?php echo $title_site->title; ?></title>
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -33,7 +32,7 @@
   <meta property="og:description" content="<?php echo $header->title; ?>" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="<?php echo $title_site->site_url; ?>" />
-  <meta property="og:image" content="<?php echo $title_site->site_url . '/' . $title_site->opengraph; ?>" />
+  <meta property="og:image" content="https://ebookford.com/activos/<?php echo $title_site->id . '/' . $title_site->opengraph; ?>" />
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-65395108-51"></script>
