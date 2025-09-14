@@ -103,8 +103,11 @@ function get_face() {
 // Promotion 
 function get_summary_promotion() {
     $json = read_json();
-    $promos =  $json->promos;
-    return $promos;
+    if (isset($json->promos)) {
+        return $json->promos;
+    }
+    // Si la propiedad 'promos' no existe, retorna un array vacío para evitar el error
+    return [];
 }
 
 // Mapurl
