@@ -151,11 +151,11 @@ function display_admin_interface($inputFileName, $validSubdomains) {
 }
 
 function serve_subdomain_site($subdomain) {
-    // USAR EL NOMBRE COMPLETO DEL SUBDOMINIO COMO CARPETA
+    // USE THE FULL SUBDOMAIN NAME AS THE FOLDER
     $folderName = $subdomain;
     $sitePath = ACTIVOS_PATH . $folderName;
 
-    // Verificar si existe el directorio
+    // Check if the directory exists
     if (!is_dir($sitePath)) {
         http_response_code(404);
         echo "<h1>Sitio no encontrado</h1>";
@@ -165,17 +165,33 @@ function serve_subdomain_site($subdomain) {
         exit;
     }
 
-    // Servir el index.html del subdominio
-    $indexFile = $sitePath . '/index.php';
-    if (file_exists($indexFile)) {
-        // Headers para caching optimizado (ajustar según necesidades)
-        header('Cache-Control: public, max-age=3600'); // Cache de 1 hora
-        readfile($indexFile);
+    // Define the possible index files to check for
+    $indexFiles = ['index.php', 'index.html'];
+    $foundFile = null;
+
+    foreach ($indexFiles as $file) {
+        $filePath = $sitePath . '/' . $file;
+        if (file_exists($filePath)) {
+            $foundFile = $filePath;
+            break;
+        }
+    }
+
+    // If an index file is found, serve it
+    if ($foundFile) {
+        // Change to the site's directory to ensure relative paths work
+        chdir($sitePath);
+
+        // Include the file to execute the PHP code
+        include $foundFile;
+        exit;
     } else {
         http_response_code(404);
         echo "<h1>Archivo no encontrado</h1>";
         echo "<p>El archivo principal para <strong>{$subdomain}</strong> no existe.</p>";
-        echo "<p>Ruta buscada: " . htmlspecialchars($indexFile) . "</p>";
+        echo "<p>Ruta buscada: " . htmlspecialchars($sitePath) . "</p>";
+        echo "<p>Rutas intentadas: " . htmlspecialchars($sitePath . '/index.php') . " y " . htmlspecialchars($sitePath . '/index.html') . "</p>";
+        exit;
     }
 }
 ?>
