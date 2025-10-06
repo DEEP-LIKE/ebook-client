@@ -6,6 +6,115 @@ class functions{
         return self::processSites();
     }
 
+    // Procesamiento por chunks para evitar timeouts
+    public function processSitesChunked($offset = 0, $chunkSize = 2){
+        $html = "";
+        $return = [];
+        $url = $_ENV['API_URL']. '/sites/actives';
+
+        error_log("Starting processSitesChunked - offset: $offset, chunkSize: $chunkSize");
+
+        // Usar cURL con configuración robusta para timeouts
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 60); // Reducido para chunks
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 15);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36');
+        
+        $result = curl_exec($ch);
+        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curl_error = curl_error($ch);
+        curl_close($ch);
+
+        if ($result === false || $http_code !== 200) {
+            error_log("Error fetching API data. HTTP Code: " . $http_code . ", cURL Error: " . $curl_error);
+            $return['success'] = false;
+            $return['message'] = "Error al obtener datos de la API. Código: " . $http_code;
+            return $return;
+        }
+
+        $json = json_decode($result, true);
+        if (json_last_error() !== JSON_ERROR_NONE || empty($json)) {
+            $return['success'] = false;
+            $return['message'] = "Error al decodificar JSON de la API.";
+            return $return;
+        }
+
+        $totalSites = count($json);
+        $sitesToProcess = array_slice($json, $offset, $chunkSize);
+        
+        error_log("Total sites: $totalSites, Processing chunk: " . count($sitesToProcess) . " sites (offset: $offset)");
+
+        // Si es el primer chunk, limpiar todo
+        if ($offset === 0) {
+            error_log("First chunk - clearing existing sites...");
+            self::clearAll();
+        }
+
+        // Procesar solo los sitios de este chunk
+        foreach ($sitesToProcess as $jsonSite) {
+            if (!isset($jsonSite['folderName'])) {
+                continue;
+            }
+            
+            $folderName = $jsonSite['folderName'];
+            $correctTitle = isset($jsonSite['title']) ? $jsonSite['title'] : '';
+            error_log("Processing site in chunk: " . $folderName);
+
+            // Crear carpeta base
+            $cloneResult = self::cloneBaseFolder($folderName);
+            if (!$cloneResult) {
+                error_log("Failed to clone base folder for: " . $folderName);
+                continue;
+            }
+
+            // Procesar imágenes y JSON
+            $siteImages = self::imagesBases($jsonSite);
+            self::processJson($folderName, $siteImages, $correctTitle);
+
+            // Generar URL
+            if (isset($_ENV['ENV']) && $_ENV['ENV'] === 'production') {
+                $currentDomain = $_SERVER['HTTP_HOST'];
+                $pageUrl = "https://".$folderName.".".$currentDomain;
+            } else {
+                $pageUrl = $_ENV['APP_URL']."/activos/".$folderName;
+            }
+
+            $html .= "<div><a target='_blank' href='".$pageUrl."' >".$pageUrl."</a></div>";
+        }
+
+        // Obtener subdominios actuales
+        $newSubdomains = [];
+        if (is_dir('./activos/')) {
+            $folders = array_filter(glob('./activos/*'), 'is_dir');
+            foreach ($folders as $folder) {
+                $folderName = basename($folder);
+                if ($folderName !== '.' && $folderName !== '..') {
+                    $newSubdomains[] = $folderName;
+                }
+            }
+        }
+
+        $nextOffset = $offset + $chunkSize;
+        $hasMore = $nextOffset < $totalSites;
+
+        $return['success'] = true;
+        $return['message'] = "Chunk procesado: " . count($sitesToProcess) . " sitios (de $totalSites total)";
+        $return['html'] = $html;
+        $return['sites'] = $sitesToProcess;
+        $return['newSubdomains'] = $newSubdomains;
+        $return['hasMore'] = $hasMore;
+        $return['nextOffset'] = $hasMore ? $nextOffset : null;
+        $return['totalSites'] = $totalSites;
+        $return['processedSites'] = $offset + count($sitesToProcess);
+
+        return $return;
+    }
+
 
 
     protected function replaceInFile($file, $findString, $replaceString){
