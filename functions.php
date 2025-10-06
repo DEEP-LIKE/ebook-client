@@ -132,9 +132,23 @@ class functions{
             $html .= "<div><a target='_blank' href='".$pageUrl."' >".$pageUrl."</a></div>";
         }
 
-        $return['message'] = "El archivo zip fue procesado correctamente.<br />";
+        // Obtener la lista actualizada de subdominios
+        $newSubdomains = [];
+        if (is_dir('./activos/')) {
+            $folders = array_filter(glob('./activos/*'), 'is_dir');
+            foreach ($folders as $folder) {
+                $folderName = basename($folder);
+                if ($folderName !== '.' && $folderName !== '..') {
+                    $newSubdomains[] = $folderName;
+                }
+            }
+        }
+
+        $return['success'] = true;
+        $return['message'] = "Los sitios fueron procesados correctamente. Se generaron " . count($json) . " sitios.<br />";
         $return['html'] = $html;
-        $return['sites'] = $json; // Agregamos la información de los sitios para debugging
+        $return['sites'] = $json;
+        $return['newSubdomains'] = $newSubdomains;
 
         return $return;
     }

@@ -23,10 +23,10 @@ require_once BASE_PATH . 'functions.php';
 $inputFileName = 'zip_file';
 
 // -------------------------------------------------------------------------
-// LÓGICA DE SUBIDA DE ARCHIVOS (BACKEND)
-// Se ejecuta si es una solicitud POST y se está subiendo un archivo
+// LÓGICA DE REGENERACIÓN DE SITIOS (BACKEND)
+// Se ejecuta si es una solicitud POST (regenerar sitios desde API)
 // -------------------------------------------------------------------------
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES[$inputFileName]["name"])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Content-Type: application/json');
 
     // Validación de seguridad adicional
@@ -116,14 +116,23 @@ function display_admin_interface($inputFileName, $validSubdomains) {
         </div>
 
         <div class="form-container">
-            <h2>Subir nuevo sitio</h2>
-            <form enctype="multipart/form-data" method="post" action="#" id="loadFileForm">
-                <label>Selecciona una imagen a subir:
-                    <input type="file" name="<?php echo $inputFileName ?>" accept="image/*" />
-                </label>
-                <br /><br />
-                <input type="submit" name="submit" value="Subir archivo" onclick='upload_image();' />
+            <h2>Regenerar sitios desde API</h2>
+            <form method="post" action="#" id="loadFileForm">
+                <p>Presiona el botón para regenerar todos los sitios activos desde el API:</p>
+                <br />
+                <input type="submit" name="submit" value="Regenerar sitios" onclick='upload_image(); return false;' />
             </form>
+            
+            <div style="margin-top: 20px; padding: 15px; background: #f0f8ff; border-radius: 5px; border-left: 4px solid #007cba;">
+                <h3 style="margin-top: 0; color: #007cba;">💡 Información</h3>
+                <p><strong>Si los sitios muestran "Sitio en construcción":</strong></p>
+                <ul>
+                    <li>Los sitios se crearon exitosamente pero con contenido básico</li>
+                    <li>Esto ocurre cuando el API no está disponible</li>
+                    <li>Los sitios aparecen en la lista y son accesibles</li>
+                    <li>Intenta regenerar nuevamente cuando el API esté disponible</li>
+                </ul>
+            </div>
 
             <div class='progress' id="progress_div">
                 <div class='bar' id='bar'></div>
