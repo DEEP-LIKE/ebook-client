@@ -6,109 +6,6 @@ class functions{
         return self::processSites();
     }
 
-    // Sistema de cache dinámico para fallback
-    protected static function getCacheFilePath(){
-        return sys_get_temp_dir() . '/ford_api_cache.json';
-    }
-
-    protected static function saveToCache($data){
-        $cacheData = [
-            'timestamp' => time(),
-            'data' => $data
-        ];
-        
-        $cacheFile = self::getCacheFilePath();
-        $result = file_put_contents($cacheFile, json_encode($cacheData, JSON_PRETTY_PRINT));
-        
-        if ($result === false) {
-            error_log("Failed to save API data to cache: " . $cacheFile);
-        } else {
-            error_log("API data saved to cache: " . $cacheFile . " (" . count($data) . " sites)");
-        }
-        
-        return $result !== false;
-    }
-
-    protected static function loadFromCache(){
-        $cacheFile = self::getCacheFilePath();
-        
-        if (!file_exists($cacheFile)) {
-            error_log("Cache file does not exist: " . $cacheFile);
-            return null;
-        }
-        
-        $cacheContent = file_get_contents($cacheFile);
-        if ($cacheContent === false) {
-            error_log("Failed to read cache file: " . $cacheFile);
-            return null;
-        }
-        
-        $cacheData = json_decode($cacheContent, true);
-        if ($cacheData === null) {
-            error_log("Failed to decode cache JSON: " . $cacheFile);
-            return null;
-        }
-        
-        $timestamp = isset($cacheData['timestamp']) ? $cacheData['timestamp'] : 0;
-        $age = time() - $timestamp;
-        $maxAge = 24 * 60 * 60; // 24 horas
-        
-        if ($age > $maxAge) {
-            error_log("Cache is too old (" . round($age/3600, 1) . " hours), ignoring");
-            return null;
-        }
-        
-        error_log("Loading from cache (age: " . round($age/60, 1) . " minutes, " . count($cacheData['data']) . " sites)");
-        return $cacheData['data'];
-    }
-
-    public static function clearCache(){
-        $cacheFile = self::getCacheFilePath();
-        if (file_exists($cacheFile)) {
-            unlink($cacheFile);
-            error_log("Cache cleared: " . $cacheFile);
-            return true;
-        }
-        return false;
-    }
-
-    public static function getCacheInfo(){
-        $cacheFile = self::getCacheFilePath();
-        
-        if (!file_exists($cacheFile)) {
-            return [
-                'exists' => false,
-                'message' => 'No hay datos en cache'
-            ];
-        }
-        
-        $cacheContent = file_get_contents($cacheFile);
-        $cacheData = json_decode($cacheContent, true);
-        
-        if ($cacheData === null) {
-            return [
-                'exists' => false,
-                'message' => 'Cache corrupto'
-            ];
-        }
-        
-        $timestamp = $cacheData['timestamp'];
-        $age = time() - $timestamp;
-        $sites = count($cacheData['data']);
-        
-        return [
-            'exists' => true,
-            'timestamp' => $timestamp,
-            'age_minutes' => round($age / 60, 1),
-            'age_hours' => round($age / 3600, 1),
-            'sites_count' => $sites,
-            'sites' => array_map(function($site) { 
-                return $site['folderName'] . ' (' . $site['title'] . ')'; 
-            }, $cacheData['data']),
-            'message' => "Cache disponible: {$sites} sitios, actualizado hace " . 
-                        ($age < 3600 ? round($age/60, 1) . " minutos" : round($age/3600, 1) . " horas")
-        ];
-    }
 
 
     protected function replaceInFile($file, $findString, $replaceString){
@@ -219,38 +116,22 @@ class functions{
 
         if ($result === false || $http_code !== 200) {
             error_log("Error fetching API data from " . $url . ". HTTP Code: " . $http_code . ", cURL Error: " . $curl_error);
-            
-            // MODO FALLBACK DINÁMICO: Usar cache de la última respuesta exitosa
-            $json = self::loadFromCache();
-            
-            if ($json === null) {
-                error_log("No cached data available, cannot proceed");
-                $return['success'] = false;
-                $return['message'] = "Error al obtener datos de la API y no hay datos en cache. Código: " . $http_code . ($curl_error ? " - " . $curl_error : "");
-                $return['html'] = "";
-                $return['sites'] = [];
-                return $return;
-            }
-            
-            error_log("Using cached data from previous successful API call (" . count($json) . " sites)");
-            $usingCache = true;
-            
-        } else {
-            $json = json_decode($result, true);
+            $return['success'] = false;
+            $return['message'] = "Error al obtener datos de la API. Código: " . $http_code . ($curl_error ? " - " . $curl_error : "");
+            $return['html'] = "";
+            $return['sites'] = [];
+            return $return;
+        }
 
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                error_log("JSON Decode Error: " . json_last_error_msg() . " for response: " . $result);
-                $return['success'] = false;
-                $return['message'] = "Error al decodificar JSON de la API.";
-                $return['html'] = "";
-                $return['sites'] = [];
-                return $return;
-            }
-            
-            // Guardar datos exitosos en cache para futuros fallbacks
-            self::saveToCache($json);
-            error_log("API data cached successfully for fallback use");
-            $usingCache = false;
+        $json = json_decode($result, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            error_log("JSON Decode Error: " . json_last_error_msg() . " for response: " . $result);
+            $return['success'] = false;
+            $return['message'] = "Error al decodificar JSON de la API.";
+            $return['html'] = "";
+            $return['sites'] = [];
+            return $return;
         }
 
         error_log("Sites found: " . count($json));
@@ -264,30 +145,39 @@ class functions{
             return $return;
         }
 
-        // Limpiar sitios existentes DESPUÉS de confirmar que tenemos datos del API
+        // PASO 1: Limpiar sitios existentes DESPUÉS de confirmar que tenemos datos del API
         error_log("API data confirmed, clearing existing sites...");
         self::clearAll();
 
+        // PASO 2: Generar TODAS las carpetas base primero
+        error_log("STEP 1: Creating all base site folders...");
         foreach ($json as $jsonSite) {
             if (!isset($jsonSite['folderName'])) {
                 error_log("Skipping site due to missing 'folderName': " . json_encode($jsonSite));
                 continue;
             }
             $folderName = $jsonSite['folderName'];
-            $correctTitle = isset($jsonSite['title']) ? $jsonSite['title'] : '';
-            error_log("Processing site: " . $folderName . " with correct title: '" . $correctTitle . "'");
+            error_log("Creating base folder for: " . $folderName);
 
-            // Clonar la carpeta base
-            error_log("About to clone base folder for: " . $folderName);
             $cloneResult = self::cloneBaseFolder($folderName);
             if (!$cloneResult) {
                 error_log("CRITICAL ERROR: Failed to clone base folder for: " . $folderName);
-                // No continuar, esto es crítico
                 $return['success'] = false;
                 $return['message'] = "Error crítico: No se pudo clonar la carpeta base para " . $folderName;
                 return $return;
             }
-            error_log("Successfully cloned base folder for: " . $folderName);
+            error_log("✅ Base folder created successfully for: " . $folderName);
+        }
+
+        // PASO 3: Actualizar cada sitio con datos del API y recursos
+        error_log("STEP 2: Updating sites with API data and resources...");
+        foreach ($json as $jsonSite) {
+            if (!isset($jsonSite['folderName'])) {
+                continue;
+            }
+            $folderName = $jsonSite['folderName'];
+            $correctTitle = isset($jsonSite['title']) ? $jsonSite['title'] : '';
+            error_log("Updating site: " . $folderName . " with API data and title: '" . $correctTitle . "'");
 
             // Procesar las imágenes del sitio
             $siteImages = self::imagesBases($jsonSite);
@@ -320,18 +210,10 @@ class functions{
         }
 
         $return['success'] = true;
-        
-        // Mensaje diferente si se usó cache
-        if (isset($usingCache) && $usingCache) {
-            $return['message'] = "⚠️ API no disponible - usando datos en cache. Se generaron " . count($json) . " sitios.<br />📋 Los sitios pueden no reflejar los cambios más recientes.";
-        } else {
-            $return['message'] = "✅ Los sitios fueron procesados correctamente desde el API. Se generaron " . count($json) . " sitios.<br />";
-        }
-        
+        $return['message'] = "✅ Los sitios fueron procesados correctamente. Se generaron " . count($json) . " sitios.<br />";
         $return['html'] = $html;
         $return['sites'] = $json;
         $return['newSubdomains'] = $newSubdomains;
-        $return['usingCache'] = isset($usingCache) ? $usingCache : false;
 
         return $return;
     }

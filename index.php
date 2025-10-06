@@ -239,35 +239,16 @@ function display_admin_interface($inputFileName, $validSubdomains) {
             </form>
             
             <div style="margin-top: 20px; padding: 15px; background: #f0f8ff; border-radius: 5px; border-left: 4px solid #007cba;">
-                <h3 style="margin-top: 0; color: #007cba;">💡 Información del Sistema</h3>
+                <h3 style="margin-top: 0; color: #007cba;">💡 Información</h3>
+                <p><strong>Proceso de Generación:</strong></p>
+                <ol>
+                    <li>🔄 <strong>Limpia sitios existentes</strong></li>
+                    <li>📁 <strong>Crea todas las carpetas base</strong> desde basesite</li>
+                    <li>🌐 <strong>Actualiza con datos del API</strong> (títulos, imágenes, etc.)</li>
+                    <li>✅ <strong>Genera sitios completos</strong> listos para usar</li>
+                </ol>
                 
-                <?php
-                require_once 'functions.php';
-                $cacheInfo = functions::getCacheInfo();
-                ?>
-                
-                <div style="margin-bottom: 15px; padding: 10px; background: <?php echo $cacheInfo['exists'] ? '#e8f5e8' : '#fff3cd'; ?>; border-radius: 3px;">
-                    <strong>📋 Estado del Cache:</strong> <?php echo $cacheInfo['message']; ?>
-                    <?php if ($cacheInfo['exists']): ?>
-                        <br><small>Sitios en cache: <?php echo implode(', ', $cacheInfo['sites']); ?></small>
-                    <?php endif; ?>
-                </div>
-                
-                <p><strong>Si los sitios muestran "Sitio en construcción":</strong></p>
-                <ul>
-                    <li>Los sitios se crearon exitosamente pero con contenido básico</li>
-                    <li>Esto ocurre cuando el API no está disponible</li>
-                    <li>Los sitios aparecen en la lista y son accesibles</li>
-                    <li>Intenta regenerar nuevamente cuando el API esté disponible</li>
-                </ul>
-                
-                <p><strong>Sistema de Cache Dinámico:</strong></p>
-                <ul>
-                    <li>✅ <strong>Escalable:</strong> Funciona con cualquier cantidad de sitios</li>
-                    <li>🔄 <strong>Automático:</strong> Se actualiza cuando el API funciona</li>
-                    <li>⚡ <strong>Fallback:</strong> Usa datos en cache si el API falla</li>
-                    <li>⏰ <strong>Vigencia:</strong> Cache válido por 24 horas</li>
-                </ul>
+                <p><strong>Nota:</strong> El sistema requiere que el API esté disponible para obtener la información actualizada de los sitios.</p>
             </div>
 
             <div class='progress' id="progress_div">
