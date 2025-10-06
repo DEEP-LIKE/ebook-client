@@ -6,63 +6,6 @@ class functions{
         return self::processSites();
     }
 
-    public function debugAPIs(){
-        $return = [];
-        $url = $_ENV['API_URL']. '/sites/actives';
-        
-        error_log("=== DEBUG API COMPARISON ===");
-        
-        // 1. Obtener datos del API actives
-        $activesResult = file_get_contents($url);
-        $activesJson = json_decode($activesResult, true);
-        
-        error_log("API /sites/actives response: " . $activesResult);
-        
-        if ($activesJson !== null) {
-            foreach ($activesJson as $site) {
-                $folderName = $site['folderName'];
-                $titleFromActives = isset($site['title']) ? $site['title'] : 'NO_TITLE';
-                
-                error_log("Site from actives - Folder: " . $folderName . ", Title: '" . $titleFromActives . "'");
-                
-                // 2. Obtener datos del API individual
-                $individualUrl = $_ENV['API_URL']. '/sites/by_folder_name/'.$folderName;
-                $individualResult = file_get_contents($individualUrl);
-                $individualJson = json_decode($individualResult, true);
-                
-                error_log("API /sites/by_folder_name/" . $folderName . " response: " . $individualResult);
-                
-                if ($individualJson !== null) {
-                    $titleFromIndividual = isset($individualJson['title']) ? $individualJson['title'] : 'NO_TITLE';
-                    $titleType = gettype($individualJson['title']);
-                    
-                    error_log("Site from individual - Folder: " . $folderName . ", Title: '" . $titleFromIndividual . "', Type: " . $titleType);
-                    
-                    // 3. Comparar y detectar problemas específicos
-                    if (is_array($individualJson['title'])) {
-                        error_log("PROBLEM DETECTED for " . $folderName . ": Individual API title is ARRAY (will show as [object Object])");
-                        error_log("  - Array content: " . json_encode($individualJson['title']));
-                        error_log("  - Should use Actives API title: '" . $titleFromActives . "'");
-                    } elseif ($titleFromActives !== $titleFromIndividual) {
-                        error_log("MISMATCH DETECTED for " . $folderName . ":");
-                        error_log("  - Actives API: '" . $titleFromActives . "'");
-                        error_log("  - Individual API: '" . $titleFromIndividual . "'");
-                        error_log("  - Individual API raw type: " . $titleType);
-                    } else {
-                        error_log("MATCH OK for " . $folderName . ": '" . $titleFromActives . "'");
-                    }
-                } else {
-                    error_log("ERROR: Individual API returned null for " . $folderName);
-                }
-            }
-        }
-        
-        error_log("=== END DEBUG API COMPARISON ===");
-        
-        $return['success'] = true;
-        $return['message'] = "Debug API completed. Check logs for details.";
-        return $return;
-    }
 
     protected function replaceInFile($file, $findString, $replaceString){
         file_put_contents($file,str_replace($findString, $replaceString, file_get_contents($file)));
@@ -283,51 +226,35 @@ class functions{
         // Asegúrate de que las claves existan en $json antes de acceder a ellas
         $jsonArray['title']['id'] = $folderName;
         
-        // WORKAROUND MEJORADO: Siempre obtener título del API actives para asegurar consistencia
+        // WORKAROUND: El API individual devuelve "[object Object]" literal, usar API actives
         $currentTitle = isset($json['title']) ? $json['title'] : '';
-        error_log("Original title from individual API for " . $folderName . ": '" . $currentTitle . "'");
         
-        // Siempre obtener el título correcto del API /sites/actives como fuente de verdad
-        $activesUrl = $_ENV['API_URL'] . '/sites/actives';
-        error_log("Fetching correct title from actives API: " . $activesUrl);
-        $activesResult = file_get_contents($activesUrl);
-        $activesJson = json_decode($activesResult, true);
-        
-        $correctTitle = '';
-        if ($activesJson !== null) {
-            foreach ($activesJson as $site) {
-                if (isset($site['folderName']) && $site['folderName'] === $folderName) {
-                    $correctTitle = isset($site['title']) ? $site['title'] : '';
-                    error_log("Found correct title in actives API for " . $folderName . ": '" . $correctTitle . "'");
-                    break;
+        // Si el título contiene "[object Object]", obtener el correcto del API actives
+        if (strpos($currentTitle, 'object Object') !== false || empty($currentTitle)) {
+            error_log("WORKAROUND: Invalid title '" . $currentTitle . "' detected for " . $folderName . ", fetching from actives API");
+            
+            $activesUrl = $_ENV['API_URL'] . '/sites/actives';
+            $activesResult = file_get_contents($activesUrl);
+            $activesJson = json_decode($activesResult, true);
+            
+            $correctTitle = '';
+            if ($activesJson !== null) {
+                foreach ($activesJson as $site) {
+                    if (isset($site['folderName']) && $site['folderName'] === $folderName) {
+                        $correctTitle = isset($site['title']) ? $site['title'] : '';
+                        break;
+                    }
                 }
             }
-        }
-        
-        // Si no encontramos título en actives, usar uno por defecto
-        if (empty($correctTitle)) {
-            $correctTitle = ($folderName === 'fordlapiedad') ? 'Ford La Piedad' : 'Ford Cavsa Motors';
-            error_log("Using default title for " . $folderName . ": " . $correctTitle);
-        }
-        
-        // Detectar si necesitamos aplicar el workaround
-        $needsWorkaround = (is_array($json['title']) ||  // El título es un array (principal problema)
-                           $currentTitle === '[object Object]' || 
-                           $currentTitle === 'object Object' || 
-                           empty($currentTitle) || 
-                           strpos($currentTitle, 'object') !== false ||
-                           $currentTitle !== $correctTitle);
-        
-        // Log adicional para arrays
-        if (is_array($json['title'])) {
-            error_log("ARRAY DETECTED: Individual API returned array for title in " . $folderName . ": " . json_encode($json['title']));
-        }
-        
-        if ($needsWorkaround) {
-            error_log("WORKAROUND APPLIED: Replacing '" . $currentTitle . "' with '" . $correctTitle . "' for folder: " . $folderName);
+            
+            // Fallback a títulos por defecto si no se encuentra en actives
+            if (empty($correctTitle)) {
+                $correctTitle = ($folderName === 'fordlapiedad') ? 'Ford La Piedad' : 'Ford Cavsa Motors';
+            }
+            
             $jsonArray['title']['title'] = $correctTitle;
+            error_log("WORKAROUND: Using correct title '" . $correctTitle . "' for " . $folderName);
         } else {
-            error_log("Title OK for folder " . $folderName . ": " . $currentTitle);
             $jsonArray['title']['title'] = $currentTitle;
         }
         

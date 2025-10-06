@@ -7,25 +7,29 @@ $dotenv->load();
 echo "Testing API connection...\n";
 echo "API URL: " . $_ENV['API_URL'] . "\n";
 
-// Test individual site API
-$folderName = 'fordlapiedad';
-$individualUrl = $_ENV['API_URL'] . '/sites/by_folder_name/' . $folderName;
-echo "Testing individual site API: " . $individualUrl . "\n\n";
+// Test individual site APIs for both sites
+$folderNames = ['fordlapiedad', 'fordcavsamotors'];
 
-$ch2 = curl_init();
-curl_setopt($ch2, CURLOPT_URL, $individualUrl);
-curl_setopt($ch2, CURLOPT_RETURNTRANSFER, 1);
-curl_setopt($ch2, CURLOPT_TIMEOUT, 30);
-$individualResult = curl_exec($ch2);
-$individualHttpCode = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
-curl_close($ch2);
+foreach ($folderNames as $folderName) {
+    $individualUrl = $_ENV['API_URL'] . '/sites/by_folder_name/' . $folderName;
+    echo "Testing individual site API: " . $individualUrl . "\n";
 
-echo "Individual API HTTP Code: " . $individualHttpCode . "\n";
-if ($individualResult !== false && $individualHttpCode === 200) {
-    $individualJson = json_decode($individualResult, true);
-    if ($individualJson !== null) {
-        echo "Individual API title: " . (isset($individualJson['title']) ? json_encode($individualJson['title']) : 'N/A') . "\n";
-        echo "Individual API title type: " . (isset($individualJson['title']) ? gettype($individualJson['title']) : 'N/A') . "\n\n";
+    $ch2 = curl_init();
+    curl_setopt($ch2, CURLOPT_URL, $individualUrl);
+    curl_setopt($ch2, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch2, CURLOPT_TIMEOUT, 30);
+    $individualResult = curl_exec($ch2);
+    $individualHttpCode = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
+    curl_close($ch2);
+
+    echo "Individual API HTTP Code: " . $individualHttpCode . "\n";
+    if ($individualResult !== false && $individualHttpCode === 200) {
+        $individualJson = json_decode($individualResult, true);
+        if ($individualJson !== null) {
+            echo "Individual API title: " . (isset($individualJson['title']) ? json_encode($individualJson['title']) : 'N/A') . "\n";
+            echo "Individual API title type: " . (isset($individualJson['title']) ? gettype($individualJson['title']) : 'N/A') . "\n";
+            echo "Raw response (first 200 chars): " . substr($individualResult, 0, 200) . "\n\n";
+        }
     }
 }
 
