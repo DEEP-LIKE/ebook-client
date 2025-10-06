@@ -190,7 +190,29 @@ class functions{
 
         // Asegúrate de que las claves existan en $json antes de acceder a ellas
         $jsonArray['title']['id'] = $folderName;
-        $jsonArray['title']['title'] = isset($json['title']) ? $json['title'] : '';
+        
+        // WORKAROUND: Si el API individual devuelve [object Object], usar el título del API actives
+        if (isset($json['title']) && $json['title'] === '[object Object]') {
+            // Obtener el título correcto del API /sites/actives
+            $activesUrl = $_ENV['API_URL'] . '/sites/actives';
+            $activesResult = file_get_contents($activesUrl);
+            $activesJson = json_decode($activesResult, true);
+            
+            $correctTitle = '';
+            if ($activesJson !== null) {
+                foreach ($activesJson as $site) {
+                    if (isset($site['folderName']) && $site['folderName'] === $folderName) {
+                        $correctTitle = isset($site['title']) ? $site['title'] : '';
+                        break;
+                    }
+                }
+            }
+            $jsonArray['title']['title'] = $correctTitle;
+            error_log("WORKAROUND: Replaced [object Object] with correct title: " . $correctTitle . " for folder: " . $folderName);
+        } else {
+            $jsonArray['title']['title'] = isset($json['title']) ? $json['title'] : '';
+        }
+        
         $jsonArray['title']['url'] = isset($json['url']) ? $json['url'] : '';
         $jsonArray['map'] = isset($json['map']) ? $json['map'] : [];
         $jsonArray['terms'] = isset($json['terms']) ? $json['terms'] : '';

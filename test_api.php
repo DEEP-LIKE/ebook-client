@@ -7,6 +7,28 @@ $dotenv->load();
 echo "Testing API connection...\n";
 echo "API URL: " . $_ENV['API_URL'] . "\n";
 
+// Test individual site API
+$folderName = 'fordlapiedad';
+$individualUrl = $_ENV['API_URL'] . '/sites/by_folder_name/' . $folderName;
+echo "Testing individual site API: " . $individualUrl . "\n\n";
+
+$ch2 = curl_init();
+curl_setopt($ch2, CURLOPT_URL, $individualUrl);
+curl_setopt($ch2, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($ch2, CURLOPT_TIMEOUT, 30);
+$individualResult = curl_exec($ch2);
+$individualHttpCode = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
+curl_close($ch2);
+
+echo "Individual API HTTP Code: " . $individualHttpCode . "\n";
+if ($individualResult !== false && $individualHttpCode === 200) {
+    $individualJson = json_decode($individualResult, true);
+    if ($individualJson !== null) {
+        echo "Individual API title: " . (isset($individualJson['title']) ? json_encode($individualJson['title']) : 'N/A') . "\n";
+        echo "Individual API title type: " . (isset($individualJson['title']) ? gettype($individualJson['title']) : 'N/A') . "\n\n";
+    }
+}
+
 $url = $_ENV['API_URL'] . '/sites/actives';
 echo "Full URL: " . $url . "\n\n";
 
@@ -34,6 +56,10 @@ if ($result !== false && $http_code === 200) {
             echo "  - ID: " . (isset($site['id']) ? $site['id'] : 'N/A') . "\n";
             echo "  - Folder Name: " . (isset($site['folderName']) ? $site['folderName'] : 'N/A') . "\n";
             echo "  - Title: " . (isset($site['title']) ? $site['title'] : 'N/A') . "\n";
+            echo "  - Title type: " . (isset($site['title']) ? gettype($site['title']) : 'N/A') . "\n";
+            if (isset($site['title'])) {
+                echo "  - Title raw: " . json_encode($site['title']) . "\n";
+            }
             echo "  - URL: " . (isset($site['url']) ? $site['url'] : 'N/A') . "\n";
             echo "  - Images: " . (isset($site['images']) ? count($site['images']) : 0) . "\n";
             echo "\n";
