@@ -103,16 +103,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     error_log("Starting site regeneration from authorized source: " . $currentHost);
     
-    // Verificar si es regeneración forzada
-    $isForceRegenerate = isset($_POST['action']) && $_POST['action'] === 'force_regenerate_sites';
+    // Verificar el tipo de acción solicitada
+    $action = isset($_POST['action']) ? $_POST['action'] : 'regenerate_sites';
+    $isForceRegenerate = ($action === 'force_regenerate_sites');
+    $isDebugAPIs = ($action === 'debug_apis');
     
     if ($isForceRegenerate) {
         error_log("FORCE REGENERATE requested - will clear all sites and regenerate from scratch");
+    } elseif ($isDebugAPIs) {
+        error_log("DEBUG APIs requested - will compare API responses");
     }
     
     try {
         $functions = new functions();
-        $process = $functions->uploadsites();
+        
+        if ($isDebugAPIs) {
+            $process = $functions->debugAPIs();
+        } else {
+            $process = $functions->uploadsites();
+        }
         
         // Asegurar que la respuesta sea válida
         if (!isset($process['success'])) {
@@ -226,6 +235,7 @@ function display_admin_interface($inputFileName, $validSubdomains) {
                 <br />
                 <input type="button" name="submit" value="Regenerar sitios" onclick='regenerate_sites();' />
                 <input type="button" name="force_regenerate" value="🔄 Forzar Regeneración Completa" onclick='force_regenerate_sites();' style="margin-left: 10px; background-color: #dc3545; color: white;" />
+                <input type="button" name="debug_apis" value="🔍 Debug APIs" onclick='debug_apis();' style="margin-left: 10px; background-color: #6c757d; color: white;" />
                 
                 <!-- Opción adicional de seguridad -->
                 <div style="margin-top: 15px; padding: 10px; background: #fff3cd; border-radius: 5px; border-left: 4px solid #ffc107;">

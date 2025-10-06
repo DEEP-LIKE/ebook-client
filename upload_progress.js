@@ -173,6 +173,80 @@ function force_regenerate_sites() {
     });
 }
 
+function debug_apis() {
+    console.log('debug_apis() called');
+    var bar = $('#bar');
+    var percent = $('#percent');
+    
+    // Verificar si se requiere modo seguro
+    var requireFile = $('#require_file_security').is(':checked');
+    var securityToken = $('#security_token').val();
+    
+    if (requireFile) {
+        var fileInput = $('#security_file')[0];
+        if (!fileInput.files || fileInput.files.length === 0) {
+            alert('Por favor selecciona un archivo para el modo seguro.');
+            return;
+        }
+    }
+    
+    // Mostrar progreso
+    document.getElementById("progress_div").style.display="block";
+    bar.width('0%');
+    percent.html('Analizando...');
+    $('#results').html('<div style="color: blue; padding: 10px; background: #e8f4fd; border-radius: 5px; margin-top: 10px;">🔍 ANALIZANDO APIs...<br>⚡ Comparando respuestas de /sites/actives vs /sites/by_folder_name<br>📊 Revisa los logs del servidor para detalles</div>');
+    
+    // Simular progreso
+    var progress = 0;
+    var interval = setInterval(function() {
+      progress += Math.random() * 20;
+      if (progress > 90) progress = 90;
+      bar.width(progress + '%');
+      percent.html(Math.round(progress) + '%');
+    }, 500);
+    
+    // Preparar datos para enviar
+    var formData = new FormData();
+    formData.append('action', 'debug_apis');
+    formData.append('security_token', securityToken);
+    
+    if (requireFile && $('#security_file')[0].files[0]) {
+        formData.append('zip_file', $('#security_file')[0].files[0]);
+    }
+    
+    // Hacer la petición AJAX
+    $.ajax({
+      url: window.location.href,
+      type: 'POST',
+      data: formData,
+      processData: false,
+      contentType: false,
+      timeout: 60000, // 1 minuto
+      success: function(response) {
+        clearInterval(interval);
+        bar.width('100%');
+        percent.html('100%');
+        
+        console.log('Debug APIs success:', response);
+        
+        if (response && response.success) {
+            $('#results').html('<div style="color: green; padding: 10px; background: #e8f5e8; border-radius: 5px; margin-top: 10px;">✅ ' + 
+                              response.message + '<br><strong>📋 Revisa los logs del servidor para ver la comparación detallada de APIs</strong></div>');
+        } else {
+            $('#results').html('<div style="color: red; padding: 10px; background: #ffe8e8; border-radius: 5px; margin-top: 10px;">❌ Error en debug: ' + 
+                              (response.message || 'Error desconocido') + '</div>');
+        }
+      },
+      error: function(xhr, status, error) {
+        clearInterval(interval);
+        console.error('Debug APIs error:', error);
+        
+        var errorMsg = 'Error en debug de APIs: ' + error;
+        $('#results').html('<div style="color: red; padding: 10px; background: #ffe8e8; border-radius: 5px; margin-top: 10px;">❌ ' + errorMsg + '</div>');
+      }
+    });
+}
+
 function handleResponse(response) {
     try {
       if (response && response.success) {
