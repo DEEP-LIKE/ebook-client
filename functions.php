@@ -572,6 +572,35 @@ class functions{
         }
         
         $jsonArray['title']['url'] = isset($json['url']) ? $json['url'] : '';
+
+        // Si el API no devolvió URL, intentar obtenerla de datos locales
+        if (empty($jsonArray['title']['url'])) {
+            $localDataFile = __DIR__ . '/local_api_data.json';
+            if (file_exists($localDataFile)) {
+                $localData = json_decode(file_get_contents($localDataFile), true);
+                if ($localData) {
+                    foreach ($localData as $site) {
+                        if (isset($site['folderName']) && $site['folderName'] === $folderName && isset($site['url'])) {
+                            $jsonArray['title']['url'] = rtrim($site['url'], '/');
+                            error_log("Using URL from local data for " . $folderName . ": " . $jsonArray['title']['url']);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Si aún no tenemos URL, usar mapeo fallback
+        if (empty($jsonArray['title']['url'])) {
+            $fallbackUrls = [
+                'fordlapiedad' => 'https://www.fordlapiedad.mx',
+                'fordcavsamotors' => 'https://www.cavsacolima.mx',
+            ];
+            $jsonArray['title']['url'] = isset($fallbackUrls[$folderName]) ? $fallbackUrls[$folderName] : '';
+            if (!empty($jsonArray['title']['url'])) {
+                error_log("Using fallback URL for " . $folderName . ": " . $jsonArray['title']['url']);
+            }
+        }
         $jsonArray['map'] = isset($json['map']) ? $json['map'] : [];
         $jsonArray['terms'] = isset($json['terms']) ? $json['terms'] : '';
         $jsonArray['facebook'] = isset($json['facebook']) ? $json['facebook'] : '';
