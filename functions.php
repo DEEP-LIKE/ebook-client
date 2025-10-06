@@ -70,24 +70,30 @@ class functions{
     }
 
     protected function processSites(){
-        self::clearAll();
         $html = "";
         $return = [];
         $url = $_ENV['API_URL']. '/sites/actives';
+
+        error_log("Starting processSites - fetching from: " . $url);
 
         // Usar cURL para una mejor gestión de errores y timeouts
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_TIMEOUT, 30); // 30 segundos de timeout
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // Para evitar problemas SSL
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); // Seguir redirects
         $result = curl_exec($ch);
         $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $curl_error = curl_error($ch);
         curl_close($ch);
 
+        error_log("API Response - HTTP Code: " . $http_code . ", cURL Error: " . $curl_error . ", Response length: " . strlen($result));
+
         if ($result === false || $http_code !== 200) {
             error_log("Error fetching API data from " . $url . ". HTTP Code: " . $http_code . ", cURL Error: " . $curl_error);
-            $return['message'] = "Error al obtener datos de la API.";
+            $return['success'] = false;
+            $return['message'] = "Error al obtener datos de la API. Código: " . $http_code . ($curl_error ? " - " . $curl_error : "");
             $return['html'] = "";
             $return['sites'] = [];
             return $return;
@@ -108,11 +114,16 @@ class functions{
 
         if (empty($json)) {
             error_log("No active sites returned by the API.");
+            $return['success'] = false;
             $return['message'] = "No se encontraron sitios activos para procesar.";
             $return['html'] = "<div>No hay sitios activos para mostrar.</div>";
             $return['sites'] = [];
             return $return;
         }
+
+        // Limpiar sitios existentes DESPUÉS de confirmar que tenemos datos del API
+        error_log("API data confirmed, clearing existing sites...");
+        self::clearAll();
 
         foreach ($json as $jsonSite) {
             if (!isset($jsonSite['folderName'])) {
@@ -120,7 +131,8 @@ class functions{
                 continue;
             }
             $folderName = $jsonSite['folderName'];
-            error_log("Processing site: " . $folderName);
+            $correctTitle = isset($jsonSite['title']) ? $jsonSite['title'] : '';
+            error_log("Processing site: " . $folderName . " with correct title: '" . $correctTitle . "'");
 
             // Clonar la carpeta base
             $cloneResult = self::cloneBaseFolder($folderName);
@@ -132,8 +144,8 @@ class functions{
             // Procesar las imágenes del sitio
             $siteImages = self::imagesBases($jsonSite);
 
-            // Procesar el JSON del sitio
-            self::processJson($folderName, $siteImages);
+            // Procesar el JSON del sitio pasando el título correcto
+            self::processJson($folderName, $siteImages, $correctTitle);
 
             // Generar la URL del sitio
             if (isset($_ENV['ENV']) && $_ENV['ENV'] === 'production') {
@@ -206,7 +218,7 @@ class functions{
         return $siteImages;
     }
 
-    protected function editJson($folderName, $jsonArray, $siteImages){
+    protected function editJson($folderName, $jsonArray, $siteImages, $correctTitle = ''){
         $url = $_ENV['API_URL']. '/sites/by_folder_name/'.$folderName;
         error_log("Fetching individual site data from: " . $url);
         
@@ -226,36 +238,15 @@ class functions{
         // Asegúrate de que las claves existan en $json antes de acceder a ellas
         $jsonArray['title']['id'] = $folderName;
         
-        // WORKAROUND: El API individual devuelve "[object Object]" literal, usar API actives
-        $currentTitle = isset($json['title']) ? $json['title'] : '';
-        
-        // Si el título contiene "[object Object]", obtener el correcto del API actives
-        if (strpos($currentTitle, 'object Object') !== false || empty($currentTitle)) {
-            error_log("WORKAROUND: Invalid title '" . $currentTitle . "' detected for " . $folderName . ", fetching from actives API");
-            
-            $activesUrl = $_ENV['API_URL'] . '/sites/actives';
-            $activesResult = file_get_contents($activesUrl);
-            $activesJson = json_decode($activesResult, true);
-            
-            $correctTitle = '';
-            if ($activesJson !== null) {
-                foreach ($activesJson as $site) {
-                    if (isset($site['folderName']) && $site['folderName'] === $folderName) {
-                        $correctTitle = isset($site['title']) ? $site['title'] : '';
-                        break;
-                    }
-                }
-            }
-            
-            // Fallback a títulos por defecto si no se encuentra en actives
-            if (empty($correctTitle)) {
-                $correctTitle = ($folderName === 'fordlapiedad') ? 'Ford La Piedad' : 'Ford Cavsa Motors';
-            }
-            
+        // Usar el título correcto del API actives que ya tenemos
+        if (!empty($correctTitle)) {
             $jsonArray['title']['title'] = $correctTitle;
-            error_log("WORKAROUND: Using correct title '" . $correctTitle . "' for " . $folderName);
+            error_log("Using correct title from actives API: '" . $correctTitle . "' for " . $folderName);
         } else {
-            $jsonArray['title']['title'] = $currentTitle;
+            // Fallback a títulos por defecto
+            $fallbackTitle = ($folderName === 'fordlapiedad') ? 'Ford La Piedad' : 'Ford Cavsa Motors';
+            $jsonArray['title']['title'] = $fallbackTitle;
+            error_log("Using fallback title: '" . $fallbackTitle . "' for " . $folderName);
         }
         
         $jsonArray['title']['url'] = isset($json['url']) ? $json['url'] : '';
@@ -365,7 +356,7 @@ class functions{
         return $jsonArray;
     }
 
-    protected function processJson($folderName, $siteImages){
+    protected function processJson($folderName, $siteImages, $correctTitle = ''){
         $jsonFilePath = "./activos/". $folderName ."/json/ford.json";
 
         // Verificar que el archivo existe antes de procesarlo
@@ -383,7 +374,7 @@ class functions{
             return;
         }
 
-        $finalJson = self::editJson($folderName, $jsonArray, $siteImages);
+        $finalJson = self::editJson($folderName, $jsonArray, $siteImages, $correctTitle);
         if (file_put_contents($jsonFilePath, json_encode($finalJson, JSON_PRETTY_PRINT)) === false) {
             error_log("Failed to write final JSON to: " . $jsonFilePath);
         } else {
