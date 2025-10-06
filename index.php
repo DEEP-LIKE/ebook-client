@@ -105,19 +105,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     error_log("Site regeneration requested from authorized source: " . $currentHost);
     
-    // Verificar si es procesamiento por chunks
-    $isChunked = isset($_POST['chunked']) && $_POST['chunked'] === 'true';
-    $offset = isset($_POST['offset']) ? (int)$_POST['offset'] : 0;
-    
     try {
         $functions = new functions();
-        
-        if ($isChunked) {
-            error_log("Processing sites in chunks - offset: " . $offset);
-            $process = $functions->processSitesChunked($offset, 2); // 2 sitios por chunk
-        } else {
-            $process = $functions->uploadsites();
-        }
+        $process = $functions->uploadsites();
         
         // Asegurar que la respuesta sea válida
         if (!isset($process['success'])) {
@@ -229,8 +219,7 @@ function display_admin_interface($inputFileName, $validSubdomains) {
                 <input type="hidden" id="security_token" value="<?php echo md5(date('Y-m-d-H') . $_SERVER['HTTP_HOST']); ?>" />
                 
                 <br />
-                <input type="button" name="submit" value="Regenerar sitios (Rápido)" onclick='regenerate_sites_chunked();' style="background-color: #28a745; color: white; margin-right: 10px;" />
-                <input type="button" name="submit_legacy" value="Regenerar sitios (Legacy)" onclick='regenerate_sites();' style="background-color: #6c757d; color: white;" />
+                <input type="button" name="submit" value="Regenerar sitios" onclick='regenerate_sites();' />
                 
                 <!-- Opción adicional de seguridad -->
                 <div style="margin-top: 15px; padding: 10px; background: #fff3cd; border-radius: 5px; border-left: 4px solid #ffc107;">
@@ -249,36 +238,6 @@ function display_admin_interface($inputFileName, $validSubdomains) {
                 </div>
             </form>
             
-            <div style="margin-top: 20px; padding: 15px; background: #f0f8ff; border-radius: 5px; border-left: 4px solid #007cba;">
-                <h3 style="margin-top: 0; color: #007cba;">💡 Información</h3>
-                
-                <div style="margin-bottom: 15px; padding: 10px; background: #e8f5e8; border-radius: 3px; border-left: 3px solid #28a745;">
-                    <strong>🚀 Regenerar sitios (Rápido) - RECOMENDADO</strong>
-                    <ul style="margin: 5px 0 0 20px;">
-                        <li>Procesa sitios en lotes pequeños (2 por vez)</li>
-                        <li>Evita errores 504 Gateway Timeout</li>
-                        <li>Progreso en tiempo real</li>
-                        <li>Más confiable para múltiples sitios</li>
-                    </ul>
-                </div>
-                
-                <div style="margin-bottom: 15px; padding: 10px; background: #f8f9fa; border-radius: 3px; border-left: 3px solid #6c757d;">
-                    <strong>⚙️ Regenerar sitios (Legacy)</strong>
-                    <ul style="margin: 5px 0 0 20px;">
-                        <li>Procesa todos los sitios de una vez</li>
-                        <li>Puede fallar con timeout en sitios múltiples</li>
-                        <li>Método original (compatibilidad)</li>
-                    </ul>
-                </div>
-                
-                <p><strong>Proceso de Generación:</strong></p>
-                <ol>
-                    <li>🔄 <strong>Limpia sitios existentes</strong></li>
-                    <li>📁 <strong>Crea carpetas base</strong> desde basesite</li>
-                    <li>🌐 <strong>Actualiza con datos del API</strong> (títulos, imágenes, etc.)</li>
-                    <li>✅ <strong>Genera sitios completos</strong> listos para usar</li>
-                </ol>
-            </div>
 
             <div class='progress' id="progress_div">
                 <div class='bar' id='bar'></div>

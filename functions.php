@@ -3,7 +3,114 @@
 class functions{
 
     public function uploadsites(){
-        return self::processSites();
+        return self::processSitesOneByOne();
+    }
+
+    // Procesamiento de uno en uno para evitar timeouts
+    protected function processSitesOneByOne(){
+        $html = "";
+        $return = [];
+        $url = $_ENV['API_URL']. '/sites/actives';
+
+        error_log("Starting processSitesOneByOne");
+
+        // Obtener datos del API
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 15);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36');
+        
+        $result = curl_exec($ch);
+        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curl_error = curl_error($ch);
+        curl_close($ch);
+
+        if ($result === false || $http_code !== 200) {
+            error_log("Error fetching API data. HTTP Code: " . $http_code . ", cURL Error: " . $curl_error);
+            $return['success'] = false;
+            $return['message'] = "Error al obtener datos de la API. Código: " . $http_code;
+            return $return;
+        }
+
+        $json = json_decode($result, true);
+        if (json_last_error() !== JSON_ERROR_NONE || empty($json)) {
+            $return['success'] = false;
+            $return['message'] = "Error al decodificar JSON de la API.";
+            return $return;
+        }
+
+        error_log("Sites found: " . count($json));
+
+        // Limpiar sitios existentes
+        error_log("Clearing existing sites...");
+        self::clearAll();
+
+        // Procesar cada sitio individualmente
+        foreach ($json as $index => $jsonSite) {
+            if (!isset($jsonSite['folderName'])) {
+                error_log("Skipping site due to missing 'folderName': " . json_encode($jsonSite));
+                continue;
+            }
+            
+            $folderName = $jsonSite['folderName'];
+            $correctTitle = isset($jsonSite['title']) ? $jsonSite['title'] : '';
+            
+            error_log("Processing site " . ($index + 1) . "/" . count($json) . ": " . $folderName);
+
+            // PASO 1: Crear carpeta base desde basesite
+            error_log("STEP 1: Creating base folder for: " . $folderName);
+            $cloneResult = self::cloneBaseFolder($folderName);
+            if (!$cloneResult) {
+                error_log("CRITICAL ERROR: Failed to clone base folder for: " . $folderName);
+                continue; // Continuar con el siguiente sitio
+            }
+            error_log("✅ Base folder created for: " . $folderName);
+
+            // PASO 2: Procesar imágenes del sitio
+            error_log("STEP 2: Processing images for: " . $folderName);
+            $siteImages = self::imagesBases($jsonSite);
+
+            // PASO 3: Actualizar JSON con datos del API
+            error_log("STEP 3: Updating JSON for: " . $folderName);
+            self::processJson($folderName, $siteImages, $correctTitle);
+
+            // Generar URL del sitio
+            if (isset($_ENV['ENV']) && $_ENV['ENV'] === 'production') {
+                $currentDomain = $_SERVER['HTTP_HOST'];
+                $pageUrl = "https://".$folderName.".".$currentDomain;
+            } else {
+                $pageUrl = $_ENV['APP_URL']."/activos/".$folderName;
+            }
+
+            $html .= "<div><a target='_blank' href='".$pageUrl."' >".$pageUrl."</a></div>";
+            
+            error_log("✅ Site completed: " . $folderName);
+        }
+
+        // Obtener subdominios finales
+        $newSubdomains = [];
+        if (is_dir('./activos/')) {
+            $folders = array_filter(glob('./activos/*'), 'is_dir');
+            foreach ($folders as $folder) {
+                $folderName = basename($folder);
+                if ($folderName !== '.' && $folderName !== '..') {
+                    $newSubdomains[] = $folderName;
+                }
+            }
+        }
+
+        $return['success'] = true;
+        $return['message'] = "✅ Los sitios fueron procesados correctamente. Se generaron " . count($json) . " sitios.<br />";
+        $return['html'] = $html;
+        $return['sites'] = $json;
+        $return['newSubdomains'] = $newSubdomains;
+
+        return $return;
     }
 
     // Procesamiento por chunks para evitar timeouts
