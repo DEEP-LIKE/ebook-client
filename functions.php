@@ -14,7 +14,7 @@ class functions{
 
         error_log("Starting processSitesOneByOne");
 
-        // Obtener datos del API
+        // Obtener datos del API con diagnóstico mejorado
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -24,17 +24,46 @@ class functions{
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36');
+        curl_setopt($ch, CURLOPT_VERBOSE, true); // Para debugging
         
         $result = curl_exec($ch);
         $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $curl_error = curl_error($ch);
+        $curl_info = curl_getinfo($ch);
         curl_close($ch);
 
         if ($result === false || $http_code !== 200) {
-            error_log("Error fetching API data. HTTP Code: " . $http_code . ", cURL Error: " . $curl_error);
-            $return['success'] = false;
-            $return['message'] = "Error al obtener datos de la API. Código: " . $http_code;
-            return $return;
+            error_log("cURL failed. HTTP Code: " . $http_code . ", cURL Error: " . $curl_error);
+            error_log("API URL attempted: " . $url);
+            error_log("Server environment: " . (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'Unknown'));
+            
+            // FALLBACK: Intentar con file_get_contents
+            error_log("Trying fallback with file_get_contents...");
+            
+            $context = stream_context_create([
+                'http' => [
+                    'timeout' => 30,
+                    'user_agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                    'ignore_errors' => true
+                ],
+                'ssl' => [
+                    'verify_peer' => false,
+                    'verify_peer_name' => false
+                ]
+            ]);
+            
+            $result = @file_get_contents($url, false, $context);
+            
+            if ($result === false) {
+                error_log("Both cURL and file_get_contents failed");
+                $return['success'] = false;
+                $return['message'] = "Error al obtener datos de la API. cURL falló (Código: " . $http_code . 
+                                   ($curl_error ? " - " . $curl_error : "") . ") y file_get_contents también falló. " .
+                                   "Verifica la conectividad del servidor al API: " . $url;
+                return $return;
+            } else {
+                error_log("file_get_contents succeeded as fallback");
+            }
         }
 
         $json = json_decode($result, true);
