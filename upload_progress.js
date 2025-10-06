@@ -1,70 +1,88 @@
 
-  function upload_image()
-  {
+console.log('upload_progress.js loaded successfully');
+
+function regenerate_sites() {
+    console.log('regenerate_sites() called');
     var bar = $('#bar');
     var percent = $('#percent');
-    $('#loadFileForm').ajaxForm({
-      beforeSubmit: function() {
-        document.getElementById("progress_div").style.display="block";
-        var percentVal = '0%';
-        bar.width(percentVal)
-        percent.html(percentVal);
+    
+    // Mostrar progreso
+    document.getElementById("progress_div").style.display="block";
+    bar.width('0%');
+    percent.html('Iniciando...');
+    $('#results').html('<div style="color: blue; padding: 10px; background: #e8f4fd; border-radius: 5px; margin-top: 10px;">🔄 Regenerando sitios desde API...<br>⚡ Conectando al servidor...<br>⏱️ Proceso estimado: 30-60 segundos.</div>');
+    
+    // Simular progreso
+    var progress = 0;
+    var interval = setInterval(function() {
+      progress += Math.random() * 10;
+      if (progress > 90) progress = 90;
+      bar.width(progress + '%');
+      percent.html(Math.round(progress) + '%');
+    }, 1000);
+    
+    // Hacer la petición AJAX
+    $.ajax({
+      url: window.location.href,
+      type: 'POST',
+      data: {
+        action: 'regenerate_sites'
       },
-
-      uploadProgress: function(event, position, total, percentComplete) {
-        var percentVal = percentComplete + '%';
-        bar.width(percentVal)
-        percent.html(percentVal);
-      },
-
-      success: function() {
-        var percentVal = '100%';
-        bar.width(percentVal)
-        percent.html(percentVal);
-      },
-
-      complete: function(xhr) {
-        console.log('Upload complete:', xhr);
-        console.log('Response status:', xhr.status);
-        console.log('Response JSON:', xhr.responseJSON);
+      timeout: 120000, // 2 minutos
+      success: function(response) {
+        clearInterval(interval);
+        bar.width('100%');
+        percent.html('100%');
         
-        try {
-          var response;
-          
-          // Intentar parsear la respuesta
-          if (xhr.responseJSON) {
-            response = xhr.responseJSON;
-          } else if (xhr.responseText) {
-            response = JSON.parse(xhr.responseText);
-          } else {
-            throw new Error('No response data');
-          }
-          
-          if (response && response.success) {
-            $('#results').html('<div style="color: green; padding: 10px; background: #e8f5e8; border-radius: 5px; margin-top: 10px;">✅ ' + 
-                              response.message + '<br>' + 
-                              (response.html || '') + '</div>');
-            
-            // Actualizar la lista de subdominios activos si está disponible
-            if (response.newSubdomains && response.newSubdomains.length > 0) {
-              updateSubdomainsList(response.newSubdomains);
-            }
-          } else if (response && response.success === false) {
-            $('#results').html('<div style="color: red; padding: 10px; background: #ffe8e8; border-radius: 5px; margin-top: 10px;">❌ Error: ' + 
-                              (response.message || 'Error desconocido') + '</div>');
-          } else {
-            $('#results').html('<div style="color: orange; padding: 10px; background: #fff3cd; border-radius: 5px; margin-top: 10px;">⚠️ Respuesta inesperada del servidor. Status: ' + xhr.status + '</div>');
-          }
-        } catch (e) {
-          console.error('Error parsing response:', e);
-          $('#results').html('<div style="color: red; padding: 10px; background: #ffe8e8; border-radius: 5px; margin-top: 10px;">❌ Error procesando respuesta del servidor<br>Status: ' + xhr.status + '<br>Response: ' + (xhr.responseText ? xhr.responseText.substring(0, 200) + '...' : 'Sin respuesta') + '</div>');
+        console.log('Success response:', response);
+        handleResponse(response);
+      },
+      error: function(xhr, status, error) {
+        clearInterval(interval);
+        console.error('Error:', error);
+        console.error('Status:', status);
+        console.error('XHR:', xhr);
+        
+        var errorMsg = 'Error de conexión: ' + error;
+        if (status === 'timeout') {
+          errorMsg = 'Timeout: El proceso tomó demasiado tiempo. Los sitios pueden haberse generado correctamente.';
         }
+        
+        $('#results').html('<div style="color: red; padding: 10px; background: #ffe8e8; border-radius: 5px; margin-top: 10px;">❌ ' + errorMsg + '</div>');
       }
     });
-  }
+}
 
-  // Función para actualizar la lista de subdominios activos
-  function updateSubdomainsList(newSubdomains) {
+function upload_image() {
+    // Función legacy - redirigir a la nueva función
+    regenerate_sites();
+}
+
+function handleResponse(response) {
+    try {
+      if (response && response.success) {
+        $('#results').html('<div style="color: green; padding: 10px; background: #e8f5e8; border-radius: 5px; margin-top: 10px;">✅ ' + 
+                          response.message + '<br>' + 
+                          (response.html || '') + '</div>');
+        
+        // Actualizar la lista de subdominios activos si está disponible
+        if (response.newSubdomains && response.newSubdomains.length > 0) {
+          updateSubdomainsList(response.newSubdomains);
+        }
+      } else if (response && response.success === false) {
+        $('#results').html('<div style="color: red; padding: 10px; background: #ffe8e8; border-radius: 5px; margin-top: 10px;">❌ Error: ' + 
+                          (response.message || 'Error desconocido') + '</div>');
+      } else {
+        $('#results').html('<div style="color: orange; padding: 10px; background: #fff3cd; border-radius: 5px; margin-top: 10px;">⚠️ Respuesta inesperada del servidor.</div>');
+      }
+    } catch (e) {
+      console.error('Error parsing response:', e);
+      $('#results').html('<div style="color: red; padding: 10px; background: #ffe8e8; border-radius: 5px; margin-top: 10px;">❌ Error procesando respuesta del servidor</div>');
+    }
+}
+
+// Función para actualizar la lista de subdominios activos
+function updateSubdomainsList(newSubdomains) {
     // Buscar la lista de subdominios
     var subdomainsList = $('p:contains("Subdominios activos:")').next('ul');
     
@@ -90,4 +108,4 @@
     } else {
       console.log('No se pudo encontrar la lista de subdominios para actualizar');
     }
-  }
+}

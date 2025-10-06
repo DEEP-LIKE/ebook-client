@@ -120,7 +120,7 @@ function display_admin_interface($inputFileName, $validSubdomains) {
             <form method="post" action="#" id="loadFileForm">
                 <p>Presiona el botón para regenerar todos los sitios activos desde el API:</p>
                 <br />
-                <input type="submit" name="submit" value="Regenerar sitios" onclick='upload_image(); return false;' />
+                <input type="button" name="submit" value="Regenerar sitios" onclick='regenerate_sites();' />
             </form>
             
             <div style="margin-top: 20px; padding: 15px; background: #f0f8ff; border-radius: 5px; border-left: 4px solid #007cba;">
