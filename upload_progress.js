@@ -60,7 +60,7 @@ function regenerate_sites() {
       data: formData,
       processData: false,
       contentType: false,
-      timeout: 120000, // 2 minutos
+      timeout: 300000, // 5 minutos para dar tiempo al API
       success: function(response) {
         clearInterval(interval);
         bar.width('100%');
