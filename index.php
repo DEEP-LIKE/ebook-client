@@ -27,6 +27,12 @@ $inputFileName = 'zip_file';
 // Se ejecuta si es una solicitud POST (regenerar sitios desde API)
 // -------------------------------------------------------------------------
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Suprimir warnings para evitar que interfieran con la respuesta JSON
+    error_reporting(E_ERROR | E_PARSE);
+    
+    // Iniciar buffer de salida para capturar cualquier output no deseado
+    ob_start();
+    
     header('Content-Type: application/json');
 
     // Validación de seguridad mejorada
@@ -97,9 +103,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     error_log("Starting site regeneration from authorized source: " . $currentHost);
     
-    $functions = new functions();
-    $process = $functions->uploadsites();
-    echo json_encode($process);
+    try {
+        $functions = new functions();
+        $process = $functions->uploadsites();
+        
+        // Asegurar que la respuesta sea válida
+        if (!isset($process['success'])) {
+            $process['success'] = true;
+        }
+        
+        // Limpiar cualquier output no deseado
+        ob_clean();
+        
+        $jsonResponse = json_encode($process);
+        error_log("Sending JSON response: " . $jsonResponse);
+        echo $jsonResponse;
+        
+    } catch (Exception $e) {
+        // Limpiar cualquier output no deseado
+        ob_clean();
+        
+        error_log("Error in site regeneration: " . $e->getMessage());
+        echo json_encode([
+            'success' => false,
+            'message' => 'Error interno: ' . $e->getMessage(),
+            'html' => ''
+        ]);
+    }
+    
+    ob_end_flush();
     exit();
 }
 
@@ -190,13 +222,16 @@ function display_admin_interface($inputFileName, $validSubdomains) {
                 <!-- Opción adicional de seguridad -->
                 <div style="margin-top: 15px; padding: 10px; background: #fff3cd; border-radius: 5px; border-left: 4px solid #ffc107;">
                     <label style="font-size: 12px;">
-                        <input type="checkbox" id="require_file_security" /> 
-                        <strong>Modo seguro:</strong> Requerir archivo para mayor seguridad contra bots
+                        <input type="checkbox" id="require_file_security" checked /> 
+                        <strong>Modo seguro (Recomendado):</strong> Requerir archivo para mayor seguridad contra bots
                     </label>
-                    <div id="file_upload_section" style="display: none; margin-top: 10px;">
+                    <div id="file_upload_section" style="display: block; margin-top: 10px;">
                         <label>Selecciona cualquier archivo pequeño (imagen, txt, etc.):
-                            <input type="file" id="security_file" name="<?php echo $inputFileName ?>" accept="*/*" />
+                            <input type="file" id="security_file" name="<?php echo $inputFileName ?>" accept="*/*" required />
                         </label>
+                        <small style="color: #666; display: block; margin-top: 5px;">
+                            ⚠️ <strong>Obligatorio:</strong> Este archivo es requerido para verificar que no eres un bot.
+                        </small>
                     </div>
                 </div>
             </form>

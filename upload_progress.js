@@ -74,13 +74,18 @@ function regenerate_sites() {
         console.error('Error:', error);
         console.error('Status:', status);
         console.error('XHR:', xhr);
+        console.error('Response Text:', xhr.responseText);
         
         var errorMsg = 'Error de conexión: ' + error;
         if (status === 'timeout') {
           errorMsg = 'Timeout: El proceso tomó demasiado tiempo. Los sitios pueden haberse generado correctamente.';
+        } else if (xhr.responseText && xhr.responseText.includes('SyntaxError')) {
+          errorMsg = 'Error de formato JSON. Revisa los logs del servidor.';
+        } else if (xhr.status === 500) {
+          errorMsg = 'Error interno del servidor (500). Revisa los logs.';
         }
         
-        $('#results').html('<div style="color: red; padding: 10px; background: #ffe8e8; border-radius: 5px; margin-top: 10px;">❌ ' + errorMsg + '</div>');
+        $('#results').html('<div style="color: red; padding: 10px; background: #ffe8e8; border-radius: 5px; margin-top: 10px;">❌ ' + errorMsg + '<br><small>Status: ' + xhr.status + '</small></div>');
       }
     });
 }
