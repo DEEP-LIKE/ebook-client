@@ -29,13 +29,74 @@ $inputFileName = 'zip_file';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Content-Type: application/json');
 
-    // Validación de seguridad adicional
-    if (!in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1']) &&
-        !isset($_SERVER['HTTP_X_EASYPANEL_REQUEST'])) {
-        echo json_encode(['success' => false, 'message' => 'Acceso no autorizado']);
+    // Validación de seguridad mejorada
+    $isAuthorized = false;
+    $currentHost = $_SERVER['HTTP_HOST'];
+    
+    // 1. Permitir desde localhost
+    if (in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1'])) {
+        $isAuthorized = true;
+        error_log("Access granted: localhost");
+    }
+    
+    // 2. Permitir desde EasyPanel
+    if (isset($_SERVER['HTTP_X_EASYPANEL_REQUEST'])) {
+        $isAuthorized = true;
+        error_log("Access granted: EasyPanel");
+    }
+    
+    // 3. Permitir desde dominios autorizados (MAIN_DOMAINS)
+    if (defined('MAIN_DOMAINS') && in_array($currentHost, MAIN_DOMAINS)) {
+        $isAuthorized = true;
+        error_log("Access granted: authorized domain " . $currentHost);
+    }
+    
+    // 4. Permitir desde subdominios de ebookford.com
+    if (strpos($currentHost, '.ebookford.com') !== false || $currentHost === 'ebookford.com') {
+        $isAuthorized = true;
+        error_log("Access granted: ebookford.com domain " . $currentHost);
+    }
+    
+    // 5. Verificar token CSRF básico
+    $expectedToken = md5(date('Y-m-d-H') . $currentHost);
+    $providedToken = isset($_POST['security_token']) ? $_POST['security_token'] : '';
+    $hasValidToken = ($providedToken === $expectedToken);
+    
+    if (!$hasValidToken) {
+        error_log("Invalid security token from: " . $currentHost . ". Expected: " . $expectedToken . ", Got: " . $providedToken);
+        echo json_encode([
+            'success' => false,
+            'message' => 'Token de seguridad inválido. Recarga la página.'
+        ]);
+        exit;
+    }
+    
+    if (!$isAuthorized) {
+        error_log("Access denied from: " . $currentHost . " (IP: " . $_SERVER['REMOTE_ADDR'] . ")");
+        echo json_encode([
+            'success' => false, 
+            'message' => 'Acceso no autorizado desde: ' . $currentHost
+        ]);
         exit;
     }
 
+    // Rate limiting básico (opcional)
+    $rateLimitFile = sys_get_temp_dir() . '/regenerate_rate_limit.txt';
+    $currentTime = time();
+    $lastRequest = file_exists($rateLimitFile) ? (int)file_get_contents($rateLimitFile) : 0;
+    
+    if ($currentTime - $lastRequest < 30) { // 30 segundos entre requests
+        echo json_encode([
+            'success' => false,
+            'message' => 'Demasiadas peticiones. Espera ' . (30 - ($currentTime - $lastRequest)) . ' segundos.'
+        ]);
+        exit;
+    }
+    
+    file_put_contents($rateLimitFile, $currentTime);
+
+    error_log("Starting site regeneration from authorized source: " . $currentHost);
+    
     $functions = new functions();
     $process = $functions->uploadsites();
     echo json_encode($process);
@@ -119,8 +180,25 @@ function display_admin_interface($inputFileName, $validSubdomains) {
             <h2>Regenerar sitios desde API</h2>
             <form method="post" action="#" id="loadFileForm">
                 <p>Presiona el botón para regenerar todos los sitios activos desde el API:</p>
+                
+                <!-- Token de seguridad anti-bot -->
+                <input type="hidden" id="security_token" value="<?php echo md5(date('Y-m-d-H') . $_SERVER['HTTP_HOST']); ?>" />
+                
                 <br />
                 <input type="button" name="submit" value="Regenerar sitios" onclick='regenerate_sites();' />
+                
+                <!-- Opción adicional de seguridad -->
+                <div style="margin-top: 15px; padding: 10px; background: #fff3cd; border-radius: 5px; border-left: 4px solid #ffc107;">
+                    <label style="font-size: 12px;">
+                        <input type="checkbox" id="require_file_security" /> 
+                        <strong>Modo seguro:</strong> Requerir archivo para mayor seguridad contra bots
+                    </label>
+                    <div id="file_upload_section" style="display: none; margin-top: 10px;">
+                        <label>Selecciona cualquier archivo pequeño (imagen, txt, etc.):
+                            <input type="file" id="security_file" name="<?php echo $inputFileName ?>" accept="*/*" />
+                        </label>
+                    </div>
+                </div>
             </form>
             
             <div style="margin-top: 20px; padding: 15px; background: #f0f8ff; border-radius: 5px; border-left: 4px solid #007cba;">

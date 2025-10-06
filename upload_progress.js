@@ -1,10 +1,33 @@
 
 console.log('upload_progress.js loaded successfully');
 
+// Manejar el checkbox de modo seguro
+$(document).ready(function() {
+    $('#require_file_security').change(function() {
+        if ($(this).is(':checked')) {
+            $('#file_upload_section').show();
+        } else {
+            $('#file_upload_section').hide();
+        }
+    });
+});
+
 function regenerate_sites() {
     console.log('regenerate_sites() called');
     var bar = $('#bar');
     var percent = $('#percent');
+    
+    // Verificar si se requiere modo seguro
+    var requireFile = $('#require_file_security').is(':checked');
+    var securityToken = $('#security_token').val();
+    
+    if (requireFile) {
+        var fileInput = $('#security_file')[0];
+        if (!fileInput.files || fileInput.files.length === 0) {
+            alert('Por favor selecciona un archivo para el modo seguro.');
+            return;
+        }
+    }
     
     // Mostrar progreso
     document.getElementById("progress_div").style.display="block";
@@ -21,13 +44,22 @@ function regenerate_sites() {
       percent.html(Math.round(progress) + '%');
     }, 1000);
     
+    // Preparar datos para enviar
+    var formData = new FormData();
+    formData.append('action', 'regenerate_sites');
+    formData.append('security_token', securityToken);
+    
+    if (requireFile && $('#security_file')[0].files[0]) {
+        formData.append('zip_file', $('#security_file')[0].files[0]);
+    }
+    
     // Hacer la petición AJAX
     $.ajax({
       url: window.location.href,
       type: 'POST',
-      data: {
-        action: 'regenerate_sites'
-      },
+      data: formData,
+      processData: false,
+      contentType: false,
       timeout: 120000, // 2 minutos
       success: function(response) {
         clearInterval(interval);
