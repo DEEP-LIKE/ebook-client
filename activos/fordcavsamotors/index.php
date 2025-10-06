@@ -26,7 +26,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" crossorigin="anonymous">
   <link rel="stylesheet" href="style/fonts.css">
-  <link rel="stylesheet" href="style/style.css"> 
+  <link rel="stylesheet" href="style/style.css">
 
   <meta property="og:title" content="<?php echo $title_site->title; ?>" />
   <meta property="og:description" content="<?php echo $header->title; ?>" />
@@ -59,7 +59,7 @@
   <?php
     $whats = get_whats();
     $facebook = get_face();
-  ?> 
+  ?>
   <ul class="socials">
     <li>
       <a href="<?php echo $facebook; ?>" target='<?php echo $href; ?>' rel="noopener noreferrer" id="facebook-click"><i class="fab fa-facebook-f"></i></a>
@@ -72,7 +72,7 @@
    <nav class="navbar fixed-top navbar-light bg-light">
       <div class="container">
         <a class="navbar-brand d-flex flex-row align-items-center" href="#" id="logo-click">
-          <img src="images/CAVSA.png"  class="d-inline-block align-top" alt="" style="max-height: 84px;">
+          <img src="images/logo.png"  class="d-inline-block align-top" alt="">
           <span class="name-distribuitor"><?php echo $title_site->title; ?></span>
         </a>
       </div>
@@ -298,7 +298,7 @@
           </div>
           <div class="d-none d-sm-block">
             <a class="navbar-brand d-flex flex-row align-items-center " href="#">
-              <img src="images/CAVSA.png"  class="d-inline-block align-top" alt="" style="max-height: 84px;">
+              <img src="images/logo.png"  class="d-inline-block align-top" alt="">
               <span class="name-distribuitor"><?php echo $title_site->title; ?></span>
             </a>
           </div>
@@ -312,7 +312,7 @@
         </div>
         <div class="d-block d-sm-none col-12 last-logo">
           <a class="navbar-brand d-flex flex-row align-items-center" href="#">
-            <img src="images/CAVSA.png"  class="d-inline-block align-top" alt="" style="max-height: 84px;">
+            <img src="images/logo.png"  class="d-inline-block align-top" alt="">
             <span class="name-distribuitor"><?php echo $title_site->title; ?></span>
           </a>
         </div>

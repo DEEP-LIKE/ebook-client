@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES[$inputFileName]["name
     }
 
     $functions = new functions();
-    $process = $functions->uploadSites();
+    $process = $functions->uploadsites();
     echo json_encode($process);
     exit();
 }
