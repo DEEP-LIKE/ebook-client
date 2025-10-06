@@ -43,13 +43,27 @@ class functions{
 
     protected function clearAll(){
         error_log("Clearing all active sites in ./activos/");
+        
+        // Asegurar que el directorio activos existe
+        if (!is_dir('./activos/')) {
+            mkdir('./activos/', 0755, true);
+            error_log("Created ./activos/ directory");
+        }
+        
         $foundFolders = glob("./activos/*", GLOB_ONLYDIR);
         if (empty($foundFolders)) {
             error_log("No folders found to clear in ./activos/");
-        }
-        foreach ($foundFolders as $folderPath) {
-            error_log("Attempting to delete folder: " . $folderPath);
-            self::deleteDirectory($folderPath);
+        } else {
+            error_log("Found " . count($foundFolders) . " folders to clear");
+            foreach ($foundFolders as $folderPath) {
+                error_log("Attempting to delete folder: " . $folderPath);
+                $result = self::deleteDirectory($folderPath);
+                if ($result) {
+                    error_log("Successfully deleted: " . $folderPath);
+                } else {
+                    error_log("Failed to delete: " . $folderPath);
+                }
+            }
         }
         error_log("Finished clearing all active sites.");
     }
@@ -211,47 +225,46 @@ class functions{
         // Asegúrate de que las claves existan en $json antes de acceder a ellas
         $jsonArray['title']['id'] = $folderName;
         
-        // WORKAROUND: Si el API individual devuelve [object Object] o título inválido, usar el título del API actives
-        $needsWorkaround = false;
+        // WORKAROUND MEJORADO: Siempre obtener título del API actives para asegurar consistencia
         $currentTitle = isset($json['title']) ? $json['title'] : '';
+        error_log("Original title from individual API for " . $folderName . ": '" . $currentTitle . "'");
         
-        // Detectar diferentes variaciones del problema
-        if ($currentTitle === '[object Object]' || 
-            $currentTitle === 'object Object' || 
-            empty($currentTitle) || 
-            strpos($currentTitle, 'object') !== false) {
-            $needsWorkaround = true;
-        }
+        // Siempre obtener el título correcto del API /sites/actives como fuente de verdad
+        $activesUrl = $_ENV['API_URL'] . '/sites/actives';
+        error_log("Fetching correct title from actives API: " . $activesUrl);
+        $activesResult = file_get_contents($activesUrl);
+        $activesJson = json_decode($activesResult, true);
         
-        if ($needsWorkaround) {
-            error_log("WORKAROUND TRIGGERED: Invalid title detected '" . $currentTitle . "' for folder: " . $folderName);
-            
-            // Obtener el título correcto del API /sites/actives
-            $activesUrl = $_ENV['API_URL'] . '/sites/actives';
-            $activesResult = file_get_contents($activesUrl);
-            $activesJson = json_decode($activesResult, true);
-            
-            $correctTitle = '';
-            if ($activesJson !== null) {
-                foreach ($activesJson as $site) {
-                    if (isset($site['folderName']) && $site['folderName'] === $folderName) {
-                        $correctTitle = isset($site['title']) ? $site['title'] : '';
-                        break;
-                    }
+        $correctTitle = '';
+        if ($activesJson !== null) {
+            foreach ($activesJson as $site) {
+                if (isset($site['folderName']) && $site['folderName'] === $folderName) {
+                    $correctTitle = isset($site['title']) ? $site['title'] : '';
+                    error_log("Found correct title in actives API for " . $folderName . ": '" . $correctTitle . "'");
+                    break;
                 }
             }
-            
-            // Si no encontramos título en actives, usar uno por defecto
-            if (empty($correctTitle)) {
-                $correctTitle = ($folderName === 'fordlapiedad') ? 'Ford La Piedad' : 'Ford Cavsa Motors';
-                error_log("WORKAROUND: Using default title: " . $correctTitle . " for folder: " . $folderName);
-            }
-            
+        }
+        
+        // Si no encontramos título en actives, usar uno por defecto
+        if (empty($correctTitle)) {
+            $correctTitle = ($folderName === 'fordlapiedad') ? 'Ford La Piedad' : 'Ford Cavsa Motors';
+            error_log("Using default title for " . $folderName . ": " . $correctTitle);
+        }
+        
+        // Detectar si necesitamos aplicar el workaround
+        $needsWorkaround = ($currentTitle === '[object Object]' || 
+                           $currentTitle === 'object Object' || 
+                           empty($currentTitle) || 
+                           strpos($currentTitle, 'object') !== false ||
+                           $currentTitle !== $correctTitle);
+        
+        if ($needsWorkaround) {
+            error_log("WORKAROUND APPLIED: Replacing '" . $currentTitle . "' with '" . $correctTitle . "' for folder: " . $folderName);
             $jsonArray['title']['title'] = $correctTitle;
-            error_log("WORKAROUND: Replaced '" . $currentTitle . "' with correct title: " . $correctTitle . " for folder: " . $folderName);
         } else {
-            $jsonArray['title']['title'] = $currentTitle;
             error_log("Title OK for folder " . $folderName . ": " . $currentTitle);
+            $jsonArray['title']['title'] = $currentTitle;
         }
         
         $jsonArray['title']['url'] = isset($json['url']) ? $json['url'] : '';

@@ -103,6 +103,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     error_log("Starting site regeneration from authorized source: " . $currentHost);
     
+    // Verificar si es regeneración forzada
+    $isForceRegenerate = isset($_POST['action']) && $_POST['action'] === 'force_regenerate_sites';
+    
+    if ($isForceRegenerate) {
+        error_log("FORCE REGENERATE requested - will clear all sites and regenerate from scratch");
+    }
+    
     try {
         $functions = new functions();
         $process = $functions->uploadsites();
@@ -218,6 +225,7 @@ function display_admin_interface($inputFileName, $validSubdomains) {
                 
                 <br />
                 <input type="button" name="submit" value="Regenerar sitios" onclick='regenerate_sites();' />
+                <input type="button" name="force_regenerate" value="🔄 Forzar Regeneración Completa" onclick='force_regenerate_sites();' style="margin-left: 10px; background-color: #dc3545; color: white;" />
                 
                 <!-- Opción adicional de seguridad -->
                 <div style="margin-top: 15px; padding: 10px; background: #fff3cd; border-radius: 5px; border-left: 4px solid #ffc107;">
