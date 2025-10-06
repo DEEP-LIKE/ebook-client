@@ -1,0 +1,44 @@
+[
+    {
+        "id": 9,
+        "folderName": "fordlapiedad",
+        "title": "Ford La Piedad",
+        "url": "https://www.fordlapiedad.mx/",
+        "active": true,
+        "images": [
+            {
+                "id": 725,
+                "filename": "cover_octubre.jpg",
+                "src": "https://ford-api-ford-api.ppm09i.easypanel.host/public/images/725/593239325a584a6662324e3064574a795a5335716347633d.jpg",
+                "reftype": "portada"
+            },
+            {
+                "id": 726,
+                "filename": "opengraph_octubre.jpg",
+                "src": "https://ford-api-ford-api.ppm09i.easypanel.host/public/images/726/593239325a584a6662324e3064574a795a5335716347633d.jpg",
+                "reftype": "opengraph"
+            }
+        ]
+    },
+    {
+        "id": 1,
+        "folderName": "fordcavsamotors",
+        "title": "Ford Cavsa Motors",
+        "url": "https://www.cavsacolima.mx/",
+        "active": true,
+        "images": [
+            {
+                "id": 672,
+                "filename": "cover_septiembre.jpg",
+                "src": "https://ford-api-ford-api.ppm09i.easypanel.host/public/images/672/593239325a584a6662324e3064574a795a5335716347633d.jpg",
+                "reftype": "portada"
+            },
+            {
+                "id": 673,
+                "filename": "opengraph_septiembre.jpg",
+                "src": "https://ford-api-ford-api.ppm09i.easypanel.host/public/images/673/593239325a584a6662324e3064574a795a5335716347633d.jpg",
+                "reftype": "opengraph"
+            }
+        ]
+    }
+]
