@@ -8,6 +8,9 @@ class functions{
 
     // Procesamiento de uno en uno para evitar timeouts
     protected function processSitesOneByOne(){
+        $_ENV['APP_URL'] = 'https://ebookford.com';
+        $_ENV['API_URL'] = 'http://ford-api_ford-api:3001';
+        
         $html = "";
         $return = [];
         
@@ -30,8 +33,8 @@ class functions{
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 30); // Reducido para probar múltiples URLs
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Reducido para probar múltiples URLs
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 120);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
@@ -624,21 +627,30 @@ class functions{
     }
 
     protected function saveImage($url, $path){
-        // Verificar que la URL sea válida
-        if (filter_var($url, FILTER_VALIDATE_URL)) {
-            error_log("Attempting to download image from: " . $url . " to: " . $path);
-            $imageData = file_get_contents($url);
-            if ($imageData !== false) {
-                if (file_put_contents($path, $imageData) === false) {
-                    error_log("Failed to save image to: " . $path);
-                } else {
-                    error_log("Successfully saved image to: " . $path);
-                }
+        // ----------------------------------------------------
+        // AÑADIR ESTAS TRES LÍNEAS PARA USAR LA RED INTERNA
+        $public_base = 'https://ford-api-ford-api.ppm09i.easypanel.host';
+        $internal_base = 'http://ford-api_ford-api:3001';
+        $url = str_replace($public_base, $internal_base, $url);
+        // ----------------------------------------------------
+        
+        // El bloque 'if (filter_var(...))' se ha ELIMINADO.
+        // Ahora intentamos la descarga directamente con la URL interna.
+        
+        error_log("Attempting to download image from: " . $url . " to: " . $path);
+        
+        // Intentar la descarga
+        $imageData = @file_get_contents($url); // Usamos @ para suprimir el warning en caso de fallo
+
+        if ($imageData !== false) {
+            if (file_put_contents($path, $imageData) === false) {
+                error_log("Failed to save image to: " . $path);
             } else {
-                error_log("No se pudo descargar la imagen (file_get_contents returned false): " . $url);
+                error_log("Successfully saved image to: " . $path);
             }
         } else {
-            error_log("URL de imagen inválida: " . $url);
+            // Este log capturará si la conexión interna falla (lo cual es poco probable ahora)
+            error_log("No se pudo descargar la imagen (file_get_contents returned false): " . $url);
         }
     }
 

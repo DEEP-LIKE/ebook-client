@@ -1,7 +1,7 @@
 <?php
-require '../../vendor/autoload.php';
-$dotenv = Dotenv\Dotenv::createImmutable('./');
-$dotenv->load();
+// require '../../vendor/autoload.php';
+// $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../..');
+// $dotenv->load();
 
 function read_json($path = './json/ford.json') {
     $json = file_get_contents($path);
