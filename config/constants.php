@@ -3,6 +3,7 @@
 // Lista de subdominios válidos.
 // Estos subdominios serán los que el enrutador PHP reconozca.
 define('VALID_SUBDOMAINS', [
+    'fordbajacal',
     'fordandradelaviga',
     'fordandradetepepan', 
     'fordandradezaragoza',

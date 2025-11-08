@@ -1,6 +1,131 @@
 [
     {
+        "id": 1,
+        "folderName": "fordbajacal",
+        "title": "Ford Baja California",
+        "url": "",
+        "active": true,
+        "images": []
+    },
+    {
+        "id": 2,
+        "folderName": "fordandradelaviga",
+        "title": "Ford Andrade La Viga",
+        "url": "",
+        "active": true,
+        "images": []
+    },
+    {
+        "id": 3,
+        "folderName": "fordandradetepepan",
+        "title": "Ford Andrade Tepepan",
+        "url": "",
+        "active": true,
+        "images": []
+    },
+    {
+        "id": 4,
+        "folderName": "fordandradezaragoza",
+        "title": "Ford Andrade Zaragoza",
+        "url": "",
+        "active": true,
+        "images": []
+    },
+    {
+        "id": 5,
+        "folderName": "fordatasa",
+        "title": "Ford Atasa",
+        "url": "",
+        "active": true,
+        "images": []
+    },
+    {
+        "id": 6,
+        "folderName": "fordautopasionmexicali",
+        "title": "Ford Autopasion Mexicali",
+        "url": "",
+        "active": true,
+        "images": []
+    },
+    {
+        "id": 7,
+        "folderName": "fordbajacai",
+        "title": "Ford Bajacai",
+        "url": "",
+        "active": true,
+        "images": []
+    },
+    {
+        "id": 8,
+        "folderName": "fordcaborca",
+        "title": "Ford Caborca",
+        "url": "",
+        "active": true,
+        "images": []
+    },
+    {
         "id": 9,
+        "folderName": "fordcavsamotors",
+        "title": "Ford Cavsa Motors",
+        "url": "https://www.cavsacolima.mx/",
+        "active": true,
+        "images": [
+            {
+                "id": 672,
+                "filename": "cover_septiembre.jpg",
+                "src": "https://ford-api-ford-api.ppm09i.easypanel.host/public/images/672/593239325a584a6662324e3064574a795a5335716347633d.jpg",
+                "reftype": "portada"
+            },
+            {
+                "id": 673,
+                "filename": "opengraph_septiembre.jpg",
+                "src": "https://ford-api-ford-api.ppm09i.easypanel.host/public/images/673/593239325a584a6662324e3064574a795a5335716347633d.jpg",
+                "reftype": "opengraph"
+            }
+        ]
+    },
+    {
+        "id": 10,
+        "folderName": "fordcever",
+        "title": "Ford Cever",
+        "url": "",
+        "active": true,
+        "images": []
+    },
+    {
+        "id": 11,
+        "folderName": "fordcoatzacoalcos",
+        "title": "Ford Coatzacoalcos",
+        "url": "",
+        "active": true,
+        "images": []
+    },
+    {
+        "id": 12,
+        "folderName": "fordcolima",
+        "title": "Ford Colima",
+        "url": "",
+        "active": true,
+        "images": []
+    },
+    {
+        "id": 13,
+        "folderName": "fordculiacan",
+        "title": "Ford Culiacan",
+        "url": "",
+        "active": true,
+        "images": []
+    },
+    {
+        "id": 14,
+        "folderName": "fordgema",
+        "title": "Ford Gema",
+        "url": "",
+        "active": true,
+        "images": []
+    },
+    {
+        "id": 15,
         "folderName": "fordlapiedad",
         "title": "Ford La Piedad",
         "url": "https://www.fordlapiedad.mx/",
@@ -21,24 +146,59 @@
         ]
     },
     {
-        "id": 1,
-        "folderName": "fordcavsamotors",
-        "title": "Ford Cavsa Motors",
-        "url": "https://www.cavsacolima.mx/",
+        "id": 16,
+        "folderName": "fordmylsaqueretaro",
+        "title": "Ford Mylsa Queretaro",
+        "url": "",
         "active": true,
-        "images": [
-            {
-                "id": 672,
-                "filename": "cover_septiembre.jpg",
-                "src": "https://ford-api-ford-api.ppm09i.easypanel.host/public/images/672/593239325a584a6662324e3064574a795a5335716347633d.jpg",
-                "reftype": "portada"
-            },
-            {
-                "id": 673,
-                "filename": "opengraph_septiembre.jpg",
-                "src": "https://ford-api-ford-api.ppm09i.easypanel.host/public/images/673/593239325a584a6662324e3064574a795a5335716347633d.jpg",
-                "reftype": "opengraph"
-            }
-        ]
+        "images": []
+    },
+    {
+        "id": 17,
+        "folderName": "fordobregon",
+        "title": "Ford Obregon",
+        "url": "",
+        "active": true,
+        "images": []
+    },
+    {
+        "id": 18,
+        "folderName": "fordpicacho",
+        "title": "Ford Picacho",
+        "url": "",
+        "active": true,
+        "images": []
+    },
+    {
+        "id": 19,
+        "folderName": "fordsumanbc",
+        "title": "Ford Suman BC",
+        "url": "",
+        "active": true,
+        "images": []
+    },
+    {
+        "id": 20,
+        "folderName": "fordsumanlavilla",
+        "title": "Ford Suman La Villa",
+        "url": "",
+        "active": true,
+        "images": []
+    },
+    {
+        "id": 21,
+        "folderName": "fordsumanmexico",
+        "title": "Ford Suman Mexico",
+        "url": "",
+        "active": true,
+        "images": []
+    },
+    {
+        "id": 22,
+        "folderName": "fordvistahermosa",
+        "title": "Ford Vistahermosa",
+        "url": "",
+        "active": true,
+        "images": []
     }
 ]

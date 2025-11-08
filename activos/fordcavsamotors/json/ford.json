@@ -2,136 +2,163 @@
     "title": {
         "id": "fordcavsamotors",
         "title": "Ford Cavsa Motors",
-        "url": "https:\/\/www.cavsacolima.mx",
-        "site_url": "https:\/\/fordcavsamotors.ebookford.com",
-        "opengraph": "opengraph_septiembre.jpg"
+        "url": "https://www.cavsacolima.mx",
+        "site_url": "https://fordcavsamotors.ebookford.com",
+        "opengraph": "opengraph_noviembre.jpg"
     },
     "header": {
-        "title": "",
-        "imagen": "cover_octubre.jpg"
+        "title": "La mejor temporada para estrenar",
+        "imagen": "cover_noviembre.jpg"
     },
-    "map": "<iframe src=\"https:\/\/www.google.com\/maps\/embed?pb=!1m18!1m12!1m3!1d3767.3509078211505!2d-103.724397569583!3d19.22353271824554!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8425501b84b58961%3A0x24570967d72fe775!2sFord!5e0!3m2!1ses!2smx!4v1620671686562!5m2!1ses!2smx\" width=\"100%\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\"><\/iframe>",
-    "terms": "https:\/\/www.ford.mx\/legal\/terminos-condiciones\/",
-    "facebook": "https:\/\/www.facebook.com\/FordColima\/?ref=bookmarks",
-    "whatsapp": "https:\/\/api.whatsapp.com\/send\/?phone=3121839068&text=Hola,+me+gustar%C3%ADa+obtener+m%C3%A1s+informaci%C3%B3n.&type=phone_number&app_absent=0",
+    "map": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3767.3509078211505!2d-103.724397569583!3d19.22353271824554!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8425501b84b58961%3A0x24570967d72fe775!2sFord!5e0!3m2!1ses!2smx!4v1620671686562!5m2!1ses!2smx\" width=\"100%\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\"></iframe>",
+    "terms": "https://www.ford.mx/legal/terminos-condiciones/",
+    "facebook": "https://www.facebook.com/FordColima/?ref=bookmarks",
+    "whatsapp": "https://api.whatsapp.com/send/?phone=3121839068&text=Hola,+me+gustar%C3%ADa+obtener+m%C3%A1s+informaci%C3%B3n.&type=phone_number&app_absent=0",
     "email": "",
     "cars": [
         {
-            "id": "promociones_septiembre",
-            "name": "PROMOCIONES SEPTIEMBRE",
-            "cotiza": "\/Cotizacion",
-            "manejo": "\/PruebadeManejo",
+            "id": "promociones_noviembre",
+            "name": "PROMOCIONES NOVIEMBRE",
+            "cotiza": "/Cotizacion",
+            "manejo": "/PruebadeManejo",
             "more": "",
-            "image": "Generico.jpg",
-            "terms": "Consulta t\u00e9rminos y condiciones en <a target=\"_blank\" href=\"https:\/\/www.ford.mx\">www.ford.mx<\/a> Vigencia del 01 al 31 de octubre del 2025"
-        },
-        {
-            "id": "ranger",
-            "name": "FORD RANGER",
-            "cotiza": "Cotizacion",
-            "manejo": "RANGER\/25\/PruebadeManejo",
-            "more": "RANGER\/25",
-            "image": "02_RANGER-WILDTRAK_02.jpg",
-            "terms": "Consulta t\u00e9rminos y condiciones en <a target=\"_blank\" href=\"https:\/\/www.ford.mx\">www.ford.mx<\/a> Vigencia del 01 al 31 de octubre del 2025"
-        },
-        {
-            "id": "ranger_raptor",
-            "name": "FORD RANGER RAPTOR",
-            "cotiza": "Cotizacion",
-            "manejo": "RANGER-RAPTOR\/25\/PruebadeManejo",
-            "more": "RANGER-RAPTOR\/25",
-            "image": "03_RANGER-RAPTOR-VERTICAL.jpg",
-            "terms": "Consulta t\u00e9rminos y condiciones en <a target=\"_blank\" href=\"https:\/\/www.ford.mx\">www.ford.mx<\/a> Vigencia del 01 al 31 de octubre del 2025"
-        },
-        {
-            "id": "lobo_hibrida",
-            "name": "LOBO HIBRIDA",
-            "cotiza": "Cotizacion",
-            "manejo": "LOBO\/25\/PruebadeManejo",
-            "more": "LOBO\/25\/",
-            "image": "04_LOBO_Hibrida-VERTICAL.jpg",
-            "terms": "Consulta t\u00e9rminos y condiciones en <a target=\"_blank\" href=\"https:\/\/www.ford.mx\">www.ford.mx<\/a> Vigencia del 01 al 31 de octubre del 2025"
-        },
-        {
-            "id": "lobo_raptor",
-            "name": "FORD LOBO RAPTOR",
-            "cotiza": "Cotizacion",
-            "manejo": "LOBO-RAPTOR\/25\/PruebadeManejo",
-            "more": "LOBO-RAPTOR\/25",
-            "image": "05_LOBO-RAPTOR-VERTICAL.jpg",
-            "terms": "Consulta t\u00e9rminos y condiciones en <a target=\"_blank\" href=\"https:\/\/www.ford.mx\">www.ford.mx<\/a> Vigencia del 01 al 31 de octubre del 2025"
-        },
-        {
-            "id": "maverick",
-            "name": "FORD MAVERICK",
-            "cotiza": "Cotizacion",
-            "manejo": "MAVERICK\/25\/PruebadeManejo",
-            "more": "MAVERICK\/25\/",
-            "image": "06_MAVERICK-H-VERTICAL.jpg",
-            "terms": "Consulta t\u00e9rminos y condiciones en <a target=\"_blank\" href=\"https:\/\/www.ford.mx\">www.ford.mx<\/a> Vigencia del 01 al 31 de octubre del 2025"
-        },
-        {
-            "id": "bronco",
-            "name": "FORD BRONCO",
-            "cotiza": "Cotizacion",
-            "manejo": "BRONCO\/25\/PruebadeManejo",
-            "more": "BRONCO\/25\/",
-            "image": "07_BRONCO-VERTICAL.jpg",
-            "terms": "Consulta t\u00e9rminos y condiciones en <a target=\"_blank\" href=\"https:\/\/www.ford.mx\">www.ford.mx<\/a> Vigencia del 01 al 31 de octubre del 2025"
-        },
-        {
-            "id": "bronco_sport",
-            "name": "FORD BRONCO SPORT",
-            "cotiza": "Cotizacion",
-            "manejo": "BRONCO-SPORT\/25\/PruebadeManejo",
-            "more": "BRONCO-SPORT\/25\/",
-            "image": "08_BRONCO-SPORT-VERTICAL.jpg",
-            "terms": "Consulta t\u00e9rminos y condiciones en <a target=\"_blank\" href=\"https:\/\/www.ford.mx\">www.ford.mx<\/a> Vigencia del 01 al 31 de octubre del 2025"
-        },
-        {
-            "id": "bronco_raptor",
-            "name": "FORD BRONCO RAPTOR",
-            "cotiza": "Cotizacion",
-            "manejo": "BRONCO-RAPTOR\/25\/PruebadeManejo",
-            "more": "BRONCO-RAPTOR\/25",
-            "image": "09_BRONCO-RAPTOR-VERTICAL.jpg",
-            "terms": "Consulta t\u00e9rminos y condiciones en <a target=\"_blank\" href=\"https:\/\/www.ford.mx\">www.ford.mx<\/a> Vigencia del 01 al 31 de octubre del 2025"
-        },
-        {
-            "id": "territory_2026",
-            "name": "FORD TERRITORY 2026",
-            "cotiza": "TERRITORY\/26",
-            "manejo": "TERRITORY\/26\/PruebadeManejo\/",
-            "more": "Promociones",
-            "image": "10_TERRITORY_2026-VERTICAL.jpg",
-            "terms": "Consulta t\u00e9rminos y condiciones en <a target=\"_blank\" href=\"https:\/\/www.ford.mx\">www.ford.mx<\/a> Vigencia del 01 al 31 de octubre del 2025"
-        },
-        {
-            "id": "territory",
-            "name": "FORD TERRITORY",
-            "cotiza": "Cotizacion",
-            "manejo": "TERRITORY\/25\/PruebadeManejo",
-            "more": "TERRITORY\/25\/",
-            "image": "11_TERRITORY-VERTICAL.jpg",
-            "terms": "Consulta t\u00e9rminos y condiciones en <a target=\"_blank\" href=\"https:\/\/www.ford.mx\">www.ford.mx<\/a> Vigencia del 01 al 31 de octubre del 2025"
+            "image": "1.jpg",
+            "terms": "Consulta t\u00e9rminos y condiciones en <a target=\"_blank\" href=\"https://www.ford.mx\">www.ford.mx</a> Vigencia del 01 de noviembre al 01 de diciembre del 2025"
         },
         {
             "id": "escape",
             "name": "FORD ESCAPE",
-            "cotiza": "Cotizacion",
-            "manejo": "ESCAPE-HIBRIDA\/25\/PruebadeManejo",
-            "more": "ESCAPE-HIBRIDA\/25\/",
-            "image": "12_ESCAPE-H-VERTICAL.jpg",
-            "terms": "Consulta t\u00e9rminos y condiciones en <a target=\"_blank\" href=\"https:\/\/www.ford.mx\">www.ford.mx<\/a> Vigencia del 01 al 31 de octubre del 2025"
+            "cotiza": "/cotizacion",
+            "manejo": "/ESCAPE-HIBRIDA/25/PruebadeManejo/",
+            "more": "/ESCAPE-HIBRIDA/25/",
+            "image": "02_ESCAPE-H.jpg",
+            "terms": "Consulta t\u00e9rminos y condiciones en <a target=\"_blank\" href=\"https://www.ford.mx\">www.ford.mx</a> Vigencia del 01 de noviembre al 01 de diciembre del 2025"
+        },
+        {
+            "id": "territory_hibrida",
+            "name": "TERRITORY HIBRIDA",
+            "cotiza": "/TERRITORY-HIBRIDA/26/cotizacion",
+            "manejo": "/TERRITORY/26/PruebadeManejo",
+            "more": "/TERRITORY/26",
+            "image": "03_TERRITORY-HI\u0301BRIDA_2026.jpg",
+            "terms": "Consulta t\u00e9rminos y condiciones en <a target=\"_blank\" href=\"https://www.ford.mx\">www.ford.mx</a> Vigencia del 01 de noviembre al 01 de diciembre del 2025"
+        },
+        {
+            "id": "territory",
+            "name": "FORD TERRITORY",
+            "cotiza": "/cotizacion",
+            "manejo": "/TERRITORY/25/PruebadeManejo",
+            "more": "/TERRITORY/25/",
+            "image": "04_TERRITORY-VERTICAL.jpg",
+            "terms": "Consulta t\u00e9rminos y condiciones en <a target=\"_blank\" href=\"https://www.ford.mx\">www.ford.mx</a> Vigencia del 01 de noviembre al 01 de diciembre del 2025"
+        },
+        {
+            "id": "maverick",
+            "name": "FORD MAVERICK",
+            "cotiza": "/cotizacion",
+            "manejo": "/MAVERICK/25/PruebadeManejo",
+            "more": "/MAVERICK/25/",
+            "image": "05_MAVERICK-H_BLUE.jpg",
+            "terms": "Consulta t\u00e9rminos y condiciones en <a target=\"_blank\" href=\"https://www.ford.mx\">www.ford.mx</a> Vigencia del 01 de noviembre al 01 de diciembre del 2025"
+        },
+        {
+            "id": "ranger",
+            "name": "FORD RANGER",
+            "cotiza": "/cotizacion",
+            "manejo": "/RANGER/25/PruebadeManejo",
+            "more": "/RANGER/25",
+            "image": "06_RANGER-WILDTRAK.jpg",
+            "terms": "Consulta t\u00e9rminos y condiciones en <a target=\"_blank\" href=\"https://www.ford.mx\">www.ford.mx</a> Vigencia del 01 de noviembre al 01 de diciembre del 2025"
+        },
+        {
+            "id": "lobo",
+            "name": "FORD LOBO",
+            "cotiza": "/LOBO/25/Cotizacion/",
+            "manejo": "/LOBO/25/PruebadeManejo/",
+            "more": "/LOBO/25",
+            "image": "07_LOBO.jpg",
+            "terms": "Consulta t\u00e9rminos y condiciones en <a target=\"_blank\" href=\"https://www.ford.mx\">www.ford.mx</a> Vigencia del 01 de noviembre al 01 de diciembre del 2025"
+        },
+        {
+            "id": "lobo_king_ranch",
+            "name": "FORD LOBO KING RANCH",
+            "cotiza": "/cotizacion",
+            "manejo": "/LOBO-KING-RANCH/25/PruebadeManejo",
+            "more": "/LOBO-KING-RANCH/25",
+            "image": "08_KING-RANCH.jpg",
+            "terms": "Consulta t\u00e9rminos y condiciones en <a target=\"_blank\" href=\"https://www.ford.mx\">www.ford.mx</a> Vigencia del 01 de noviembre al 01 de diciembre del 2025"
+        },
+        {
+            "id": "bronco_sport",
+            "name": "FORD BRONCO SPORT",
+            "cotiza": "/cotizacion",
+            "manejo": "/BRONCO-SPORT/25/PruebadeManejo",
+            "more": "/BRONCO-SPORT/25/",
+            "image": "09_BRONCO-BLUE.jpg",
+            "terms": "Consulta t\u00e9rminos y condiciones en <a target=\"_blank\" href=\"https://www.ford.mx\">www.ford.mx</a> Vigencia del 01 de noviembre al 01 de diciembre del 2025"
+        },
+        {
+            "id": "bronco",
+            "name": "FORD BRONCO",
+            "cotiza": "/cotizacion",
+            "manejo": "/BRONCO/25/PruebadeManejo",
+            "more": "/BRONCO/25/",
+            "image": "10_BRONCO.jpg",
+            "terms": "Consulta t\u00e9rminos y condiciones en <a target=\"_blank\" href=\"https://www.ford.mx\">www.ford.mx</a> Vigencia del 01 de noviembre al 01 de diciembre del 2025"
         },
         {
             "id": "explorer",
             "name": "FORD EXPLORER",
-            "cotiza": "Cotizacion",
-            "manejo": "EXPLORER\/25\/PruebadeManejo",
-            "more": "EXPLORER\/25",
-            "image": "13_EXPLORER-VERTICAL.jpg",
-            "terms": "Consulta t\u00e9rminos y condiciones en <a target=\"_blank\" href=\"https:\/\/www.ford.mx\">www.ford.mx<\/a> Vigencia del 01 al 31 de octubre del 2025"
+            "cotiza": "/cotizacion",
+            "manejo": "/EXPLORER/25/PruebadeManejo",
+            "more": "/EXPLORER/25",
+            "image": "11_EXPLORER.jpg",
+            "terms": "Consulta t\u00e9rminos y condiciones en <a target=\"_blank\" href=\"https://www.ford.mx\">www.ford.mx</a> Vigencia del 01 de noviembre al 01 de diciembre del 2025"
+        },
+        {
+            "id": "bronco_raptor",
+            "name": "FORD BRONCO RAPTOR",
+            "cotiza": "/cotizacion",
+            "manejo": "/BRONCO-RAPTOR/25/PruebadeManejo",
+            "more": "/BRONCO-RAPTOR/25",
+            "image": "12_BRONCO-RAPTOR.jpg",
+            "terms": "Consulta t\u00e9rminos y condiciones en <a target=\"_blank\" href=\"https://www.ford.mx\">www.ford.mx</a> Vigencia del 01 de noviembre al 01 de diciembre del 2025"
+        },
+        {
+            "id": "ranger_raptor",
+            "name": "FORD RANGER RAPTOR",
+            "cotiza": "/cotizacion",
+            "manejo": "/RANGER-RAPTOR/25/PruebadeManejo",
+            "more": "/RANGER-RAPTOR/25",
+            "image": "13_RANGER-RAPTOR_BLUE.jpg",
+            "terms": "Consulta t\u00e9rminos y condiciones en <a target=\"_blank\" href=\"https://www.ford.mx\">www.ford.mx</a> Vigencia del 01 de noviembre al 01 de diciembre del 2025"
+        },
+        {
+            "id": "lobo_raptor",
+            "name": "FORD LOBO RAPTOR",
+            "cotiza": "/cotizacion",
+            "manejo": "/LOBO-RAPTOR/25/PruebadeManejo",
+            "more": "/LOBO-RAPTOR/25",
+            "image": "14_LOBO-RAPTOR.jpg",
+            "terms": "Consulta t\u00e9rminos y condiciones en <a target=\"_blank\" href=\"https://www.ford.mx\">www.ford.mx</a> Vigencia del 01 de noviembre al 01 de diciembre del 2025"
+        },
+        {
+            "id": "lobo_hibrida",
+            "name": "LOBO HIBRIDA",
+            "cotiza": "/cotizacion",
+            "manejo": "/LOBO/25/PruebadeManejo",
+            "more": "/LOBO/25/",
+            "image": "15_LOBO-HIBRIDA.jpg",
+            "terms": "Consulta t\u00e9rminos y condiciones en <a target=\"_blank\" href=\"https://www.ford.mx\">www.ford.mx</a> Vigencia del 01 de noviembre al 01 de diciembre del 2025"
+        },
+        {
+            "id": "mustang",
+            "name": "FORD MUSTANG",
+            "cotiza": "/cotizacion",
+            "manejo": "/MUSTANG/24/PruebadeManejo",
+            "more": "/MUSTANG/24/",
+            "image": "16_MUSTANG.jpg",
+            "terms": "Consulta t\u00e9rminos y condiciones en <a target=\"_blank\" href=\"https://www.ford.mx\">www.ford.mx</a> Vigencia del 01 de noviembre al 01 de diciembre del 2025"
         }
     ]
 }

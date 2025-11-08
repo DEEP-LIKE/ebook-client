@@ -9,15 +9,19 @@ class functions{
     // Procesamiento de uno en uno para evitar timeouts
     protected function processSitesOneByOne(){
         $_ENV['APP_URL'] = 'https://ebookford.com';
-        $_ENV['API_URL'] = 'http://ford-api_ford-api:3001';
         
+        // Asegurarse de que la URL del API esté definida. Si no, usar el valor de producción como fallback.
+        if (empty($_ENV['API_URL'])) {
+            $_ENV['API_URL'] = 'http://ford-api_ford-api:3001';
+        }
         $html = "";
         $return = [];
         
-        // Intentar múltiples URLs del API como fallback
+        // URL pública (prioridad 1) y URL interna (prioridad 2, para producción)
         $apiUrls = [
-            $_ENV['API_URL'] . '/sites/actives',
-            'https://httpbin.org/json' // URL de prueba pública para verificar conectividad
+            'https://ford-api-ford-api.ppm09i.easypanel.host/sites/actives',
+            'http://ford-api_ford-api:3001/sites/actives',
+            'https://httpbin.org/json' // URL de prueba para verificar conectividad general
         ];
 
         error_log("Starting processSitesOneByOne");
@@ -57,33 +61,22 @@ class functions{
 
         if ($result === false) {
             error_log("All API URLs failed. Using local fallback data.");
-            
-            // FALLBACK FINAL: Usar datos locales
             $localDataFile = __DIR__ . '/local_api_data.json';
             if (file_exists($localDataFile)) {
                 $result = file_get_contents($localDataFile);
                 $successful_url = 'local_fallback';
                 error_log("Using local API data as fallback");
             } else {
-                error_log("Local fallback data not found");
                 $return['success'] = false;
-                $return['message'] = "Error al obtener datos de la API. Todas las URLs fallaron y no hay datos locales. " .
-                                   "Último error: " . $last_error . ". El servidor no puede conectar al API.";
+                $return['message'] = "Error: El API no está disponible y el archivo de respaldo 'local_api_data.json' no fue encontrado.";
                 return $return;
             }
         }
 
         $json = json_decode($result, true);
-        if (json_last_error() !== JSON_ERROR_NONE || empty($json)) {
-            $return['success'] = false;
-            $return['message'] = "Error al decodificar JSON de la API.";
-            return $return;
-        }
-
-        // Si usamos la URL de prueba o fallback local, los datos ya están listos
-        if ($successful_url && ($successful_url === 'local_fallback' || strpos($successful_url, 'httpbin') !== false)) {
-            if (strpos($successful_url, 'httpbin') !== false) {
-                error_log("Using test URL - creating sample data");
+        if ($successful_url && strpos($successful_url, 'httpbin') !== false) {
+            if (isset($json['slideshow']['slides'])) {
+                error_log("Using httpbin.org test URL - creating sample data from local file as httpbin data is not compatible.");
                 $json = [
                     [
                         'id' => 1,
@@ -102,8 +95,13 @@ class functions{
                         'images' => []
                     ]
                 ];
+                $successful_url = 'local_fallback'; // Treat as local fallback
             }
-            // Si es local_fallback, $json ya tiene los datos correctos del archivo JSON
+        }
+        if (json_last_error() !== JSON_ERROR_NONE || empty($json)) {
+            $return['success'] = false;
+            $return['message'] = "Error al decodificar JSON de la API.";
+            return $return;
         }
 
         error_log("Sites found: " . count($json));
@@ -143,7 +141,7 @@ class functions{
 
             // Generar URL del sitio
             if (isset($_ENV['ENV']) && $_ENV['ENV'] === 'production') {
-                $currentDomain = $_SERVER['HTTP_HOST'];
+                $currentDomain = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'ebookford.com';
                 $pageUrl = "https://".$folderName.".".$currentDomain;
             } else {
                 $pageUrl = $_ENV['APP_URL']."/activos/".$folderName;
@@ -256,7 +254,7 @@ class functions{
 
             // Generar URL
             if (isset($_ENV['ENV']) && $_ENV['ENV'] === 'production') {
-                $currentDomain = $_SERVER['HTTP_HOST'];
+                $currentDomain = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'ebookford.com';
                 $pageUrl = "https://".$folderName.".".$currentDomain;
             } else {
                 $pageUrl = $_ENV['APP_URL']."/activos/".$folderName;
@@ -475,7 +473,7 @@ class functions{
             // Generar la URL del sitio
             if (isset($_ENV['ENV']) && $_ENV['ENV'] === 'production') {
                 // Usa el dominio actual en lugar de ebookford.com
-                $currentDomain = $_SERVER['HTTP_HOST'];
+                $currentDomain = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'ebookford.com';
                 $pageUrl = "https://".$folderName.".".$currentDomain;
             } else {
                 $pageUrl = $_ENV['APP_URL']."/activos/".$folderName;
@@ -544,14 +542,43 @@ class functions{
     }
 
     protected function editJson($folderName, $jsonArray, $siteImages, $correctTitle = ''){
-        $url = $_ENV['API_URL']. '/sites/by_folder_name/'.$folderName;
-        error_log("Fetching individual site data from: " . $url);
-        
-        $result = file_get_contents($url); // Consider using cURL here too for better error handling
-        error_log("Raw API response for " . $folderName . ": " . $result);
-        
-        $json = json_decode($result, true);
+        $apiUrls = [
+            $_ENV['API_URL'] . '/sites/by_folder_name/' . $folderName,
+            'https://ford-api-ford-api.ppm09i.easypanel.host/sites/by_folder_name/' . $folderName
+        ];
+        $result = false;
+        $successful_url = null;
 
+        foreach ($apiUrls as $url) {
+            error_log("Fetching individual site data from: " . $url);
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+            $result = curl_exec($ch);
+            $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+
+            if ($result !== false && $http_code === 200) {
+                $successful_url = $url;
+                error_log("Successfully fetched data for $folderName from: $url");
+                break;
+            } else {
+                error_log("Failed to fetch data for $folderName from $url. HTTP: $http_code");
+            }
+        }
+
+        if ($result === false) {
+            error_log("Could not fetch individual site data for $folderName from any API URL.");
+            // Return the array with just the base modifications if API fails
+            return $jsonArray;
+        }
+
+        $json = json_decode($result, true);
+        
         // Verificar que el JSON se decodificó correctamente
         if ($json === null) {
             error_log("Error decodificando JSON para folder: " . $folderName . ". Raw response: " . $result);
@@ -628,12 +655,12 @@ class functions{
 
     protected function saveImage($url, $path){
         // ----------------------------------------------------
-        // AÑADIR ESTAS TRES LÍNEAS PARA USAR LA RED INTERNA
+        // SOLUCIÓN: Reemplazar la URL interna por la pública para que sea accesible.
         $public_base = 'https://ford-api-ford-api.ppm09i.easypanel.host';
         $internal_base = 'http://ford-api_ford-api:3001';
-        $url = str_replace($public_base, $internal_base, $url);
+        $url = str_replace($internal_base, $public_base, $url);
         // ----------------------------------------------------
-        
+
         // El bloque 'if (filter_var(...))' se ha ELIMINADO.
         // Ahora intentamos la descarga directamente con la URL interna.
         

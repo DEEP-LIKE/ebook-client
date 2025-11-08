@@ -1,0 +1,4 @@
+[06-Aug-2025 15:11:03 UTC] PHP Warning:  require(../../vendor/autoload.php): failed to open stream: No such file or directory in /home/d5kor6umkb37/public_html/ebookford.com/basesite/lib/functions.php on line 2
+[06-Aug-2025 15:11:03 UTC] PHP Fatal error:  require(): Failed opening required '../../vendor/autoload.php' (include_path='.:/opt/alt/php74/usr/share/pear') in /home/d5kor6umkb37/public_html/ebookford.com/basesite/lib/functions.php on line 2
+[06-Aug-2025 15:11:13 UTC] PHP Warning:  require(../../vendor/autoload.php): failed to open stream: No such file or directory in /home/d5kor6umkb37/public_html/ebookford.com/basesite/lib/functions.php on line 2
+[06-Aug-2025 15:11:13 UTC] PHP Fatal error:  require(): Failed opening required '../../vendor/autoload.php' (include_path='.:/opt/alt/php74/usr/share/pear') in /home/d5kor6umkb37/public_html/ebookford.com/basesite/lib/functions.php on line 2

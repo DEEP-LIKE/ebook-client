@@ -15,11 +15,11 @@
 <?php $title_site = get_title(); ?>
 <?php $header = get_header(); ?>
 <head>
+  <base href="/activos/<?php echo $title_site->id; ?>/">
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <base href="/activos/<?php echo $title_site->id; ?>/">
-  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico">
+  <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico">
   <title><?php echo $title_site->title; ?></title>
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -72,7 +72,7 @@
    <nav class="navbar fixed-top navbar-light bg-light">
       <div class="container">
         <a class="navbar-brand d-flex flex-row align-items-center" href="#" id="logo-click">
-          <img src="images/logo.png"  class="d-inline-block align-top" alt="">
+          <img src="images/logo2.png"  class="d-inline-block align-top" alt="" style="max-height: 64px;">
           <span class="name-distribuitor"><?php echo $title_site->title; ?></span>
         </a>
       </div>
@@ -298,7 +298,7 @@
           </div>
           <div class="d-none d-sm-block">
             <a class="navbar-brand d-flex flex-row align-items-center " href="#">
-              <img src="images/logo.png"  class="d-inline-block align-top" alt="">
+              <img src="images/logo2.png"  class="d-inline-block align-top" alt="" style="max-height: 64px;">
               <span class="name-distribuitor"><?php echo $title_site->title; ?></span>
             </a>
           </div>
@@ -312,7 +312,7 @@
         </div>
         <div class="d-block d-sm-none col-12 last-logo">
           <a class="navbar-brand d-flex flex-row align-items-center" href="#">
-            <img src="images/logo.png"  class="d-inline-block align-top" alt="">
+            <img src="images/logo2.png"  class="d-inline-block align-top" alt="" style="max-height: 64px;">
             <span class="name-distribuitor"><?php echo $title_site->title; ?></span>
           </a>
         </div>
