@@ -1,0 +1,68 @@
+services:
+  sitio_main:
+    image: trafex/php-nginx:3.9.0
+    container_name: sitio_web_main
+    restart: unless-stopped
+    networks:
+      - traefik-proxy
+    volumes:
+      - ./www:/var/www/html
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sitio-main.rule=Host(`ebookford.com`)"
+      - "traefik.http.routers.sitio-main.entrypoints=websecure"
+      - "traefik.http.routers.sitio-main.tls.certresolver=letsencrypt"
+      - "traefik.http.services.sitio-main.loadbalancer.server.port=8080"
+      - "traefik.docker.network=traefik-proxy"
+
+  sitio_fordbajacal:
+    image: trafex/php-nginx:3.9.0
+    container_name: sitio_web_fordbajacal
+    restart: unless-stopped
+    networks:
+      - traefik-proxy
+    volumes:
+      - ./www/activos/fordbajacal:/var/www/html
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sitio-fordbajacal.rule=Host(`fordbajacal.ebookford.com`)"
+      - "traefik.http.routers.sitio-fordbajacal.entrypoints=websecure"
+      - "traefik.http.routers.sitio-fordbajacal.tls.certresolver=letsencrypt"
+      - "traefik.http.services.sitio-fordbajacal.loadbalancer.server.port=8080"
+      - "traefik.docker.network=traefik-proxy"
+
+  sitio_fordcavsamotors:
+    image: trafex/php-nginx:3.9.0
+    container_name: sitio_web_fordcavsamotors
+    restart: unless-stopped
+    networks:
+      - traefik-proxy
+    volumes:
+      - ./www/activos/fordcavsamotors:/var/www/html
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sitio-fordcavsamotors.rule=Host(`fordcavsamotors.ebookford.com`)"
+      - "traefik.http.routers.sitio-fordcavsamotors.entrypoints=websecure"
+      - "traefik.http.routers.sitio-fordcavsamotors.tls.certresolver=letsencrypt"
+      - "traefik.http.services.sitio-fordcavsamotors.loadbalancer.server.port=8080"
+      - "traefik.docker.network=traefik-proxy"
+
+  sitio_fordlapiedad:
+    image: trafex/php-nginx:3.9.0
+    container_name: sitio_web_fordlapiedad
+    restart: unless-stopped
+    networks:
+      - traefik-proxy
+    volumes:
+      - ./www/activos/fordlapiedad:/var/www/html
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sitio-fordlapiedad.rule=Host(`fordlapiedad.ebookford.com`)"
+      - "traefik.http.routers.sitio-fordlapiedad.entrypoints=websecure"
+      - "traefik.http.routers.sitio-fordlapiedad.tls.certresolver=letsencrypt"
+      - "traefik.http.services.sitio-fordlapiedad.loadbalancer.server.port=8080"
+      - "traefik.docker.network=traefik-proxy"
+
+networks:
+  traefik-proxy:
+    external: true
